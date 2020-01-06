@@ -1,0 +1,68 @@
+@charset "utf-8";
+/* CSS Document */
+
+article{
+	clear: both;
+	padding-top: 10px;
+}
+
+caption{
+	text-decoration: none;
+	text-align: left;
+}
+
+/*****************************************
+トップメニュー：submitボタン
+******************************************/
+.top_button{
+	width: 400px;
+	height: 50px;
+	display       : inline-block;
+	border-radius : 5%;          /* 角丸       */
+	font-size     : 18pt;        /* 文字サイズ */
+	text-align    : center;      /* 文字位置   */
+	cursor        : pointer;     /* カーソル   */
+	padding       : 12px 42px;   /* 余白       */
+	background    : #a6a6a6;     /* 背景色     */
+	color         : #ffffff;     /* 文字色     */
+	line-height   : 1em;         /* 1行の高さ  */
+	transition    : .3s;         /* なめらか変化 */
+	box-shadow    : 3px 3px 1px #666666;  /* 影の設定 */
+	border        : 2px solid #a6a6a6;    /* 枠の指定 */
+}
+
+/***inquireKBTorder.jsp
+    inquireKBTsabun.jsp
+    inquireKBTsubunAll.jsp***/
+.juchu_waku,
+.hinban_sum{
+	clear: both;
+}
+
+/***inquireKabusoku.jsp***/
+.naiji_total{
+	width: 80px;
+}
+
+/***inquireKBTorder.jsp***/
+#day1_qty{
+	background: #f5f5f5
+}
+
+#day3_qty{
+	background: #f5f5f5
+}
+
+button{
+	font-size: 12px;
+	padding: 0px 10px;
+}
+
+/***searchKBTorder.jsp***/
+.search_juchu{
+	width: 400px;
+	padding-left: 30px;
+	text-align: center;
+}
+
+
