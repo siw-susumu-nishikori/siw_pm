@@ -24,8 +24,8 @@
 		<link href="../../siwportalsite/SIW-Portal-site/css/common_zangyou.css" rel="stylesheet" type="text/css"/>
 		<link href="../../siwportalsite/SIW-Portal-site/css/zangyou.css" rel="stylesheet" type="text/css"/>
 
-		<script type="text/javascript" src="../../siw_pm/JS/js/jquery-1.10.2.min.js"></script>
-		<script type="text/javascript" src="../../siw_pm/JS/js/jquery-ui.js"></script>
+		<script type="text/javascript" src="../../siw_pm/js/jquery-1.10.2.min.js"></script>
+		<script type="text/javascript" src="../../siw_pm/js/jquery-ui.js"></script>
 
 	</head>
 
