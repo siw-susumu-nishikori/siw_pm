@@ -269,4 +269,37 @@
     <servlet-name>KBTsabunSearch2</servlet-name>
     <url-pattern>/KBTsabunSearch2</url-pattern>
   </servlet-mapping>
+
+
+
+  <servlet>
+    <description></description>
+    <display-name>ActOyahinbanSelect</display-name>
+    <servlet-name>ActOyahinbanSelect</servlet-name>
+    <servlet-class>jp.siw.pa.actoyahinban.ActOyahinbanSelect</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>ActOyahinbanSelect</servlet-name>
+    <url-pattern>/ActOyahinbanSelect</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>CsvImport</display-name>
+    <servlet-name>CsvImport</servlet-name>
+    <servlet-class>jp.siw.pa.yamazumi.CsvImport</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>CsvImport</servlet-name>
+    <url-pattern>/CsvImport</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>YamazumiCreate</display-name>
+    <servlet-name>YamazumiCreate</servlet-name>
+    <servlet-class>jp.siw.pa.yamazumi.YamazumiCreate</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>YamazumiCreate</servlet-name>
+    <url-pattern>/YamazumiCreate</url-pattern>
+  </servlet-mapping>
 </web-app>
