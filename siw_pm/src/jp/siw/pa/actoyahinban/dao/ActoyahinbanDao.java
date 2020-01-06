@@ -148,10 +148,11 @@ public class ActoyahinbanDao {
 		Connection connection = source.getConnection();
 
 		//t_fukaテーブル削除
-		PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_act_oyahinmoku2 into outfile \'C:/pleiades/workspace/siw_pm/WebContent/FUKA/FUKA_FILES/" + today + "_t_act_oya.csv\' fields terminated by \',\' enclosed by \'\"\' ");
-		//PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_fuka into outfile \'C:/users/see04nave/desktop/" + today + "_t_fuka.csv\' fields terminated by \',\' enclosed by \'\"\' ");
-		//PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_fuka into outfile \'C:/temp/" + today + "_t_fuka.csv\' fields terminated by \',\' enclosed by \'\"\' ");
-		//PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_fuka into outfile \'//192.168.101.236/riseプロジェクト/15.生産負荷計算/" + today + "_t_fuka.csv\' fields terminated by \',\' enclosed by \'\"\' ");
+		PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_act_oyahinmoku2 into outfile \'C:/Users/SEE04NAVE/git/siw_pm/siw_pm/WebContent/FUKA/FUKA_FILES/" + today + "_t_act_oya.csv\' fields terminated by \',\' enclosed by \'\"\' ");
+
+		//サーバー移行後は↓こちらを使う
+		//PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_act_oyahinmoku2 into outfile \'C:/pleiades/workspace/siw_pm/WebContent/FUKA/FUKA_FILES/" + today + "_t_act_oya.csv\' fields terminated by \',\' enclosed by \'\"\' ");
+
 		statementFukaCsv.executeQuery();
 
 		//File srcFile = new File("C:/fuka/" + today + "_t_fuka.csv");

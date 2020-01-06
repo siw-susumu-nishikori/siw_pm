@@ -105,7 +105,12 @@ public class CsvImport extends HttpServlet {
 
 
             //フォルダ内データ検索
-    		String dir = "C:/pleiades_1/workspace/siw_pa/WebContent/FUKA/FUKA_FILES";
+    		String dir = "C:/Users/SEE04NAVE/git/siw_pm/siw_pm/WebContent/FUKA/FUKA_FILES";
+            //フォルダ内データ検索
+    		//サーバーアップロード時には↓を使う
+    		//String dir = "C:/pleiades_1/workspace/siw_pa/WebContent/FUKA/FUKA_FILES";
+
+
             // Fileクラスをインスタンス化
             File file = new File(dir);
 
@@ -118,27 +123,27 @@ public class CsvImport extends HttpServlet {
 
             for (int i=0 ; i<fileSu ; i++){
 
-            	temp_files_URL[i] = "../siw_pa/FUKA/FUKA_FILES/" + temp_files[i];
+            	temp_files_URL[i] = "../siw_pm/siw_pm/FUKA/FUKA_FILES/" + temp_files[i];
             	System.out.println(temp_files_URL[i]);
             }
 
             request.setAttribute("temp_files_URL", temp_files_URL);
-            br.close();
+            //br.close();
 
         } catch (SQLException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
-			br.close();
+			//br.close();
 		} catch (NamingException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
-			br.close();
-		} catch (IOException e) {
-			e.printStackTrace();
-			br.close();
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-			br.close();
+			//br.close();
+		//} catch (IOException e) {
+		//	e.printStackTrace();
+		//	//br.close();
+		//} catch (NullPointerException e) {
+		//	e.printStackTrace();
+		//	//br.close();
 		}
 		resultPage = PropertyLoader.getProperty("url.yamazumi_jsp.importCsv");
 		RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);

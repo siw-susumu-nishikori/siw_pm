@@ -46,9 +46,9 @@ public class ActOyahinbanSelect extends HttpServlet {
         String today  = timeStampNowDay.format(nowTime);
         request.setAttribute("today", today);
         //日付表示ここまで
-        String tkcd = "1101";//KHI
+        //String tkcd = "1101";//KHI
         //String tkcd = "1001";//SMC
-        //String tkcd = "1511";//KBT
+        String tkcd = "1511";//KBT
         //String tkcd = "1102";//日立建機T
 
 
@@ -68,7 +68,12 @@ public class ActOyahinbanSelect extends HttpServlet {
 
 
             //フォルダ内データ検索
-    		String dir = "C:/pleiades/workspace/siw_pm/WebContent/FUKA/FUKA_FILES";
+    		String dir = "C:/Users/SEE04NAVE/git/siw_pm/siw_pm/WebContent/FUKA/FUKA_FILES";
+            //フォルダ内データ検索
+
+    		//サーバーにアップロード時はこちらを使う
+    		//String dir = "C:/pleiades/workspace/siw_pm/WebContent/FUKA/FUKA_FILES";
+
             // Fileクラスをインスタンス化
             File file = new File(dir);
 
@@ -81,7 +86,7 @@ public class ActOyahinbanSelect extends HttpServlet {
 
             for (int i=0 ; i<fileSu ; i++){
 
-            	temp_files_URL[i] = "../siw_pm/FUKA/FUKA_FILES/" + temp_files[i];
+            	temp_files_URL[i] = "../siw_pm/siw_pm/FUKA/FUKA_FILES/" + temp_files[i];
             	System.out.println(temp_files_URL[i]);
             }
 
@@ -94,7 +99,7 @@ public class ActOyahinbanSelect extends HttpServlet {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-		resultPage = PropertyLoader.getProperty("url.yamazumi_jsp.insertHinban");
+		resultPage = PropertyLoader.getProperty("url.actoyahinban_jsp.insertHinban");
 		RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
 		dispatcher.forward(request, response);
 	}
