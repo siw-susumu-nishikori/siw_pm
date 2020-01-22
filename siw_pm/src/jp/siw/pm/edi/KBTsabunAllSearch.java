@@ -29,28 +29,31 @@ public class KBTsabunAllSearch extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-        String resultPage = PropertyLoader.getProperty("url.jsp.error");
 
-        String insymd1 = request.getParameter("day1");
-        String insymd2 = request.getParameter("day2");
+		String resultPage = PropertyLoader.getProperty("url.jsp.error");
 
-        try {
-            KBTediDAO dao = new KBTediDAO();
-            List<KBTItemBean> SabunAllList = dao.getSabunAllList(insymd1, insymd2);
+		String insymd1 = request.getParameter("day1");
+		String insymd2 = request.getParameter("day2");
 
-            request.setAttribute("SabunAllList", SabunAllList);
-            resultPage = PropertyLoader.getProperty("url.servlet.KBTsabunAllSearch2");
+		try {
 
-        } catch (NamingException e) {
-            request.setAttribute("errorMessage", e.getMessage());
+			KBTediDAO dao = new KBTediDAO();
+			List<KBTItemBean> SabunAllList = dao.getSabunAllList(insymd1, insymd2);
 
-        } catch (SQLException e) {
-            request.setAttribute("errorMessage", e.getMessage());
-        }
+			request.setAttribute("SabunAllList", SabunAllList);
+			resultPage = PropertyLoader.getProperty("url.servlet.KBTsabunAllSearch2");
 
-        RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
-        dispatcher.forward(request, response);
-    }
+		} catch (NamingException e) {
+			request.setAttribute("errorMessage", e.getMessage());
+
+		} catch (SQLException e) {
+			request.setAttribute("errorMessage", e.getMessage());
+
+		}
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
+		dispatcher.forward(request, response);
+
+	}
 
 }

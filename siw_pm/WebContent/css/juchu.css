@@ -2,9 +2,29 @@
 /* CSS Document */
 
 article{
+	margin:auto;
+	width:850px;
 	clear: both;
 	padding-top: 10px;
+
 }
+
+section.under{
+	margin: auto;
+	padding-bottom: 10px;
+	border-bottom: dashed 2px #999;
+	width: 1350px;
+	position: relative;
+	right: 240px;
+}
+
+section.bottom{
+	margin-bottom: 20px;
+}
+
+table {
+     border-collapse:collapse;
+ }
 
 caption{
 	text-decoration: none;
@@ -37,6 +57,12 @@ caption{
 .juchu_waku,
 .hinban_sum{
 	clear: both;
+	display: block;
+	overflow-x: auto;
+	white-space: nowrap;
+	-webkit-overflow-scrolling: touch;
+	position: relative;
+	right: 240px;
 }
 
 /***inquireKabusoku.jsp***/
@@ -45,13 +71,30 @@ caption{
 }
 
 /***inquireKBTorder.jsp***/
-#day1_qty{
-	background: #f5f5f5
+td.day1_qty, .day3_qty{
+	background: #f5f5f5;
 }
 
-#day3_qty{
-	background: #f5f5f5
+td.comfirm{
+	background: #bbffff;
 }
+
+/***inquiKakuteiKikan.jsp***/
+td.kikan{
+	font-weight: bold;
+	background: #bbffff;
+}
+
+td.border-none{
+	border: none;
+}
+
+td.border-style{
+	border: none;
+	padding-top: 10px;
+	padding-bottom: 10px;
+}
+
 
 button{
 	font-size: 12px;
@@ -65,4 +108,52 @@ button{
 	text-align: center;
 }
 
+table.order_search{
+	height: 35px;
+	border: solid 1px #CCC;
+
+}
+
+section.cntr{
+	text-align: center;
+}
+
+table.center{
+	margin: auto;
+}
+
+p.caption, caption.caption{
+	font-weight: bold;
+	text-align: left;
+	color: #336;
+	width: auto;
+}
+
+p.caption2{
+	font-weight: bold;
+	text-align: left;
+	padding-left: 10px;
+	color: #336;
+	width: auto;
+}
+
+/***importKBTediComplete.jsp***/
+p.complete{
+	font-weight: bold;
+	font-size: 18px;
+	color: #336;
+	width: auto;
+	margin-top: 50px;
+	margin-bottom: 50px;
+}
+
+/***error.jsp***/
+p.error{
+	font-weight: bold;
+	font-size: 24px;
+}
+
+p.error1{
+	font-weight: bold;
+}
 

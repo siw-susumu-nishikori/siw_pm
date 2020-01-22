@@ -1,6 +1,8 @@
 package jp.siw.pm.edi;
 
 import java.io.IOException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -28,9 +30,16 @@ public class KBTediManager extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		 String resultPage = PropertyLoader.getProperty("url.jsp.importKBTedi");
-	         RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
-         dispatcher.forward(request, response);
-     }
+		String resultPage = PropertyLoader.getProperty("url.jsp.importKBTedi");
 
- }
+        Timestamp nowTime= new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");
+        String today  = timeStampNowDay.format(nowTime);
+        request.setAttribute("today", today);
+
+		RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
+		dispatcher.forward(request, response);
+
+	}
+
+}

@@ -6,6 +6,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -37,96 +39,116 @@ public class KBTediRead extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
 		response.setContentType("text/html;charset=UTF-8");
 		String resultPage = PropertyLoader.getProperty("url.jsp.error");
 		String[] jvan = null;
 
+        Timestamp nowTime= new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");
+        String today  = timeStampNowDay.format(nowTime);
+        request.setAttribute("today", today);
+
 		try	{
-            // ファイルのパスを指定する
-            File file = new File("\\\\192.168.101.236\\riseプロジェクト\\16.クボタEDI取込フォルダ\\RCV_JVAN.DAT");
-            File file2 = new File("\\\\192.168.101.236\\riseプロジェクト\\16.クボタEDI取込フォルダ\\RCV_JVAN (2).DAT");
-            File file3 = new File("\\\\192.168.101.236\\riseプロジェクト\\16.クボタEDI取込フォルダ\\RCV_JVAN (3).DAT");
 
-            // ファイルが存在しない場合に例外が発生するので確認する
-           /* if (!file.exists()) {
-                System.out.print("ファイルが存在しません");
-                return;
-                }*/
+			// ファイルのパスを指定する
+			File file = new File("\\\\192.168.101.236\\riseプロジェクト\\16.クボタEDI取込フォルダ\\RCV_JVAN.DAT");
+			File file2 = new File("\\\\192.168.101.236\\riseプロジェクト\\16.クボタEDI取込フォルダ\\RCV_JVAN (2).DAT");
+			File file3 = new File("\\\\192.168.101.236\\riseプロジェクト\\16.クボタEDI取込フォルダ\\RCV_JVAN (3).DAT");
 
-            // BufferedReaderクラスのreadLineメソッドを使って1行ずつ読み込み表示する
-            BufferedReader bufferedReader = null;
-            BufferedReader bufferedReader2 = null;
-            BufferedReader bufferedReader3 = null;
+			// ファイルが存在しない場合に例外が発生するので確認する
+			/* if (!file.exists()) {
+			 * System.out.print("ファイルが存在しません");
+			 * return;
+			 * }*/
 
-            String line;
-            List<String> lineList = new ArrayList<String>();
+			// BufferedReaderクラスのreadLineメソッドを使って1行ずつ読み込み表示する
+			BufferedReader bufferedReader = null;
+			BufferedReader bufferedReader2 = null;
+			BufferedReader bufferedReader3 = null;
 
-            if(!file.exists() && !file2.exists() && !file3.exists()){
-            	System.out.print("ファイルが存在しません");
-                return;
-            }else if(!file2.exists() && !file3.exists()){
-                bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"Shift-JIS"));
+			String line;
+			List<String> lineList = new ArrayList<String>();
 
-                while((line = bufferedReader.readLine()) != null){
-                	lineList.add(line);
-                	}
+			if(!file2.exists() && !file3.exists()){
+				bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"Shift-JIS"));
 
-                // 最後にファイルを閉じてリソースを開放する
-                bufferedReader.close();
+				while((line = bufferedReader.readLine()) != null){
 
-            }else if(!file3.exists()){
-            	bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"Shift-JIS"));
-            	bufferedReader2 = new BufferedReader(new InputStreamReader(new FileInputStream(file2),"Shift-JIS"));
+					lineList.add(line);
 
-                while((line = bufferedReader.readLine()) != null){
-                	lineList.add(line);
-                	}
-                while((line = bufferedReader2.readLine()) != null){
-                	lineList.add(line);
-                	}
+				}
 
-                // 最後にファイルを閉じてリソースを開放する
-                bufferedReader.close();
+				// 最後にファイルを閉じてリソースを開放する
+				bufferedReader.close();
+
+			}else if(!file3.exists()){
+				bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"Shift-JIS"));
+				bufferedReader2 = new BufferedReader(new InputStreamReader(new FileInputStream(file2),"Shift-JIS"));
+
+				while((line = bufferedReader.readLine()) != null){
+					lineList.add(line);
+
+				}
+
+				while((line = bufferedReader2.readLine()) != null){
+					lineList.add(line);
+
+				}
+
+				// 最後にファイルを閉じてリソースを開放する
+				bufferedReader.close();
                 bufferedReader2.close();
 
-            }else{
-            	bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"Shift-JIS"));
-                bufferedReader2 = new BufferedReader(new InputStreamReader(new FileInputStream(file2),"Shift-JIS"));
-                bufferedReader3 = new BufferedReader(new InputStreamReader(new FileInputStream(file3),"Shift-JIS"));
+			}else{
+				bufferedReader = new BufferedReader(new InputStreamReader(new FileInputStream(file),"Shift-JIS"));
+				bufferedReader2 = new BufferedReader(new InputStreamReader(new FileInputStream(file2),"Shift-JIS"));
+				bufferedReader3 = new BufferedReader(new InputStreamReader(new FileInputStream(file3),"Shift-JIS"));
 
-                while((line = bufferedReader.readLine()) != null){
-                	lineList.add(line);
-                	}
-                while((line = bufferedReader2.readLine()) != null){
-                	lineList.add(line);
-                	}
-                while((line = bufferedReader3.readLine()) != null){
-                	lineList.add(line);
-                	}
+				while((line = bufferedReader.readLine()) != null){
+					lineList.add(line);
 
-                // 最後にファイルを閉じてリソースを開放する
-                bufferedReader.close();
-                bufferedReader2.close();
-                bufferedReader3.close();
+				}
 
-            }
+				while((line = bufferedReader2.readLine()) != null){
+					lineList.add(line);
 
-            jvan = lineList.toArray(new String[lineList.size()]);
-            int n = jvan.length;
-            String[][] kb35 = new String[n][0];
+				}
 
-            for(int i=0; i<jvan.length; i++){
-            	kb35[i] = jvan;
-    	    	}
+				while((line = bufferedReader3.readLine()) != null){
+					lineList.add(line);
 
-    		request.setAttribute("kb35", kb35);
+				}
+
+				// 最後にファイルを閉じてリソースを開放する
+				bufferedReader.close();
+				bufferedReader2.close();
+				bufferedReader3.close();
+
+			}
+
+			jvan = lineList.toArray(new String[lineList.size()]);
+			int n = jvan.length;
+			String[][] kb35 = new String[n][0];
+
+			for(int i=0; i<jvan.length; i++){
+				kb35[i] = jvan;
+
+			}
+
+			request.setAttribute("kb35", kb35);
 			request.setAttribute("message", PropertyLoader.getProperty("message.completeInsertion"));
 			resultPage = PropertyLoader.getProperty("url.servlet.KBTediRegister");
 
 		}catch (FileNotFoundException e) {
-			request.setAttribute("errorMessage", PropertyLoader.getProperty("message.FileNotFoundException"));
-			}
+			request.setAttribute("errorMessage", PropertyLoader.getProperty("message.FileNotFoundException_jvan"));
+			System.out.println(e);
+
+		}
+
 		RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
 		dispatcher.forward(request, response);
+
 		}
-	}
+
+}

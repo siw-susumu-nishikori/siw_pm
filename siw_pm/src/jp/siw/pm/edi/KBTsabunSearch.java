@@ -29,13 +29,12 @@ public class KBTsabunSearch extends HttpServlet {
      */
     public KBTsabunSearch() {
         super();
-        // TODO Auto-generated constructor stub
+
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-        String resultPage = PropertyLoader.getProperty("url.jsp.error");
 
+		String resultPage = PropertyLoader.getProperty("url.jsp.error");
         String hinban = request.getParameter("hinban");
         String insymd1 = request.getParameter("day1");
         String insymd2 = request.getParameter("day2");
@@ -44,23 +43,30 @@ public class KBTsabunSearch extends HttpServlet {
         Timestamp nowTime= new Timestamp(System.currentTimeMillis());
         SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");
         String toDay  = timeStampNowDay.format(nowTime);
+        request.setAttribute("today", toDay);
 
         String e_date = request.getParameter("e_date");
 
         try {
-            KBTediDAO dao = new KBTediDAO();
+
+        	KBTediDAO dao = new KBTediDAO();
             List<KBTItemBean> SabunList = dao.getSabunList(hinban, insymd1, insymd2, hyoujiymd, request, response);
+            request.setAttribute("SabunList", SabunList);
+
             List<KBTItemBean> Tsuika_juchuList = dao.getTsuika_juchuList(hinban, toDay);
+            request.setAttribute("Tsuika_juchuList", Tsuika_juchuList);
+
             List<KBTItemBean> KikanZaikoList = dao.getKikanZaikoList(hinban, insymd2, toDay, e_date);
+            request.setAttribute("KikanZaikoList", KikanZaikoList);
 
             @SuppressWarnings("unchecked")
 			List<String> sasuList = (List<String>) request.getAttribute("sasuList");
+
             @SuppressWarnings("unchecked")
 			List<CsvImportBean> ZaikoList = (List<CsvImportBean>) request.getAttribute("ZaikoList");
 
-            request.setAttribute("SabunList", SabunList);
-            request.setAttribute("Tsuika_juchuList", Tsuika_juchuList);
-            request.setAttribute("KikanZaikoList", KikanZaikoList);
+            List<KBTItemBean> naijiListDay = dao.getNaijiListDay();
+            request.setAttribute("naijiListDay", naijiListDay);
 
             System.out.println("List="+sasuList);
             System.out.println("zaiko_su="+ZaikoList);

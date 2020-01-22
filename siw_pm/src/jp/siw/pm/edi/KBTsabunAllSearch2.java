@@ -2,6 +2,8 @@ package jp.siw.pm.edi;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.naming.NamingException;
@@ -33,27 +35,34 @@ public class KBTsabunAllSearch2 extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String resultPage = PropertyLoader.getProperty("url.jsp.error");
 
-     try {
+		String resultPage = PropertyLoader.getProperty("url.jsp.error");
 
-        KBTediDAO dao = new KBTediDAO();
-        List<KBTItemBean> SabunAllList2 = dao.getSabunAllList2();
+		Timestamp nowTime= new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");
+        String today  = timeStampNowDay.format(nowTime);
+        request.setAttribute("today", today);
 
-        request.setAttribute("SabunAlluList2", SabunAllList2);
+        try {
 
-        resultPage = PropertyLoader.getProperty("url.jsp.inquireKBTsabunAll");
+        	KBTediDAO dao = new KBTediDAO();
+        	List<KBTItemBean> SabunAllList2 = dao.getSabunAllList2();
 
-    } catch (NamingException e) {
-        request.setAttribute("errorMessage", e.getMessage());
+        	request.setAttribute("SabunAlluList2", SabunAllList2);
 
-    } catch (SQLException e) {
-        request.setAttribute("errorMessage", e.getMessage());
-    }
+        	resultPage = PropertyLoader.getProperty("url.jsp.inquireKBTsabunAll");
 
-    RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
-    dispatcher.forward(request, response);
+        } catch (NamingException e) {
+        	request.setAttribute("errorMessage", e.getMessage());
+
+        } catch (SQLException e) {
+        	request.setAttribute("errorMessage", e.getMessage());
+
+        }
+        RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
+        dispatcher.forward(request, response);
 
 	}
+
 }
 

@@ -1,9 +1,10 @@
+//*****このサーブレットは未使用*****//
 package jp.siw.pm.edi;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
@@ -35,17 +36,19 @@ public class KBTsabunSearch2 extends HttpServlet {
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-	       String resultPage = PropertyLoader.getProperty("url.jsp.error");
-	       List<KBTItemBean> sabunAllCsvList2 = Cast.castList(request.getAttribute("sabunAllCsvList2"));
-
-           for (int i = 0; i < sabunAllCsvList2.size(); i++) {
-               String[] hinban = {sabunAllCsvList2.get(i).getHinban()};
+		request.setCharacterEncoding("UTF-8");
+    	System.out.println("=====KBTsabunSearch2.java START=====");
+		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+		List<KBTItemBean> sabunAllCsvList2 = Cast.castList(request.getAttribute("sabunAllCsvList2"));
+		List<KBTItemBean>MinusAllList = new ArrayList<KBTItemBean> ();
+		for (int i = 0; i < sabunAllCsvList2.size(); i++) {
+			String[] hinban = {sabunAllCsvList2.get(i).getHinban()};
            	System.out.println("hinban="+Arrays.toString(hinban));
 
-	        String insymd1 = request.getParameter("kikan_s");
-	        String insymd2 = request.getParameter("kikan_s");
+	        String insymd1 = request.getParameter("day1");
+	        String insymd2 = request.getParameter("day2");
 	        String hyoujiymd = request.getParameter("hyoujiymd");
-        	System.out.println(insymd1);
+        	System.out.println(insymd1 + insymd2);
         	System.out.println(insymd2);
         	System.out.println("hyoujiymd="+hyoujiymd);
 	        Timestamp nowTime= new Timestamp(System.currentTimeMillis());
@@ -56,30 +59,34 @@ public class KBTsabunSearch2 extends HttpServlet {
         	System.out.println("e_date="+e_date);
 
 	        try {
-	            KBTediDAO dao = new KBTediDAO();
-	            List<KBTItemBean> SabunMinusList = dao.getSabunMinusList(hinban, insymd1, insymd2, hyoujiymd, request, response);
-	            List<KBTItemBean> Tsuika_juchuMinusList = dao.getTsuika_juchuMinusList(hinban, toDay);
-	            List<KBTItemBean> KikanZaikoMinusList = dao.getKikanZaikoMinusList(hinban, insymd2, toDay, e_date);
 
+	            KBTediDAO dao = new KBTediDAO();
+	            //List<KBTItemBean> SabunMinusList = dao.getSabunMinusList(hinban, insymd1, insymd2, hyoujiymd, request, response);
+	            //List<KBTItemBean> Tsuika_juchuMinusList = dao.getTsuika_juchuMinusList(hinban, toDay);
+	            //List<KBTItemBean> KikanZaikoMinusList = dao.getKikanZaikoMinusList(hinban, insymd2, toDay, e_date);
+//MinusAllList.addAll(SabunMinusList);
 	            @SuppressWarnings("unchecked")
 				List<String> sasuList = (List<String>) request.getAttribute("sasuList");
 	            @SuppressWarnings("unchecked")
 				List<CsvImportBean> ZaikoList = (List<CsvImportBean>) request.getAttribute("ZaikoList");
 
-	            request.setAttribute("SabunMinusList", SabunMinusList);
+	            /*request.setAttribute("SabunMinusList", SabunMinusList);
+	            request.setAttribute("MinusAllList", MinusAllList);
 	            request.setAttribute("Tsuika_juchuMinusList", Tsuika_juchuMinusList);
 	            request.setAttribute("KikanZaikoMinusList", KikanZaikoMinusList);
-
-	            System.out.println("List="+sasuList);
+	            System.out.println("=====KBTsabunSearch2.java=====");
+	            System.out.println("SABUNMINUSLIST="+SabunMinusList);
+	            System.out.println("MINUS-ALL-LIST="+MinusAllList);
+	            System.out.println("sasuList="+sasuList);
 	            System.out.println("zaiko_su="+ZaikoList);
 	            System.out.println("Tsuika_juchuList="+Tsuika_juchuMinusList);
-
-	            resultPage = PropertyLoader.getProperty("url.jsp.inquireKBTsabun");
+*/
+	            resultPage = PropertyLoader.getProperty("url.jsp.inquireKBTsabunMinusAll");
 
 	        } catch (NamingException e) {
 	            request.setAttribute("errorMessage", e.getMessage());
 
-	        } catch (SQLException e) {
+	        //} catch (SQLException e) {
 	            request.setAttribute("errorMessage", e.getMessage());
 	        }
            }

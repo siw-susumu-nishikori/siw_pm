@@ -41,6 +41,7 @@ public class KabusokuSearch extends HttpServlet {
         Timestamp nowTime= new Timestamp(System.currentTimeMillis());
         SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");
         String toDay  = timeStampNowDay.format(nowTime);
+        request.setAttribute("today", toDay);
 
         String e_date = request.getParameter("e_date");
 

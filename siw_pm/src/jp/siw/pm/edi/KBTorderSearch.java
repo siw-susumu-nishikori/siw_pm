@@ -2,6 +2,8 @@ package jp.siw.pm.edi;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.naming.NamingException;
@@ -30,8 +32,8 @@ public class KBTorderSearch extends HttpServlet {
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		// TODO Auto-generated method stub
-        String resultPage = PropertyLoader.getProperty("url.jsp.error");
+
+		String resultPage = PropertyLoader.getProperty("url.jsp.error");
 
         String hinban = request.getParameter("hinban");
         String insymd1 = request.getParameter("day1");
@@ -39,8 +41,20 @@ public class KBTorderSearch extends HttpServlet {
         String insymd3 = request.getParameter("day3");
         String dispDate = request.getParameter("disp_date");
 
+        Timestamp nowTime= new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");
+        String today  = timeStampNowDay.format(nowTime);
+        request.setAttribute("today", today);
+
+	        System.out.println(hinban);
+	        System.out.println(insymd1);
+	        System.out.println(insymd2);
+	        System.out.println(insymd3);
+	        System.out.println(dispDate);
+
         try {
-            KBTediDAO dao = new KBTediDAO();
+
+        	KBTediDAO dao = new KBTediDAO();
             List<KBTItemBean> itemListHinban = dao.getItemListHinban();
             request.setAttribute("itemListHinban", itemListHinban);
 
@@ -58,6 +72,7 @@ public class KBTorderSearch extends HttpServlet {
 
         RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
         dispatcher.forward(request, response);
-    }
+
+	}
 
 }

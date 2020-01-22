@@ -2,6 +2,8 @@ package jp.siw.pm.edi;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 import javax.naming.NamingException;
@@ -33,11 +35,17 @@ public class KakuteiKikanRegister extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String resultPage = PropertyLoader.getProperty("url.jsp.error");
+
+		String resultPage = PropertyLoader.getProperty("url.jsp.error");
         String kikanValue = request.getParameter("kikan");
+        Timestamp nowTime= new Timestamp(System.currentTimeMillis());
+        SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");
+        String today  = timeStampNowDay.format(nowTime);
+        request.setAttribute("today", today);
 
         try{
-            KakuteikikanDAO dao = new KakuteikikanDAO();
+
+        	KakuteikikanDAO dao = new KakuteikikanDAO();
             dao.insertKikan(kikanValue);
             KakuteikikanDAO kikandao = new KakuteikikanDAO();
 
@@ -46,16 +54,20 @@ public class KakuteiKikanRegister extends HttpServlet {
 
             resultPage = PropertyLoader.getProperty("url.jsp.inquireKakuteiKikan");
 
-	    }catch (SQLException e) {
-			request.setAttribute("errorMessage", e.getMessage());
+        }catch (SQLException e) {
+        	request.setAttribute("errorMessage", e.getMessage());
 
 		} catch (NumberFormatException e) {
 			request.setAttribute("errorMessage", PropertyLoader.getProperty("message.NumberFormatException"));
-			} catch (NamingException e) {
+
+		} catch (NamingException e) {
 			// TODO 自動生成された catch ブロック
 			e.printStackTrace();
 		}
-		RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
+
+        RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
 		dispatcher.forward(request, response);
-		}
+
+	}
+
 }
