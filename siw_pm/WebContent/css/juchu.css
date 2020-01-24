@@ -40,6 +40,7 @@ caption{
 	display       : inline-block;
 	border-radius : 5%;          /* 角丸       */
 	font-size     : 18pt;        /* 文字サイズ */
+	font-weight   : bold;        /* 文字の太さ */
 	text-align    : center;      /* 文字位置   */
 	cursor        : pointer;     /* カーソル   */
 	padding       : 12px 42px;   /* 余白       */
@@ -51,6 +52,9 @@ caption{
 	border        : 2px solid #a6a6a6;    /* 枠の指定 */
 }
 
+.top_button:hover{
+	opacity: 0.6;
+}
 /***inquireKBTorder.jsp
     inquireKBTsabun.jsp
     inquireKBTsubunAll.jsp***/
@@ -89,16 +93,44 @@ td.border-none{
 	border: none;
 }
 
+td.hinban{
+	font-size: 14px;
+	font-weight: bold;
+	border: none;
+}
+
 td.border-style{
 	border: none;
 	padding-top: 10px;
 	padding-bottom: 10px;
 }
 
+/***importKBTedi.jsp
+	inportTanpinZaiko.jsp
+	searchKBTorder.jsp
+	setKikan.jsp***/
+input.submit_btn{
+	width: 120px;
+}
 
+input.submit_btn:hover{
+	opacity: 0.8;
+}
+
+/***inquireKBTsubunAll.jsp***/
 button{
 	font-size: 12px;
 	padding: 0px 10px;
+}
+
+button:hover{
+	opacity: 0.8;
+}
+
+/***inquireKBTsabun.jsp
+    inquireKBTsubunMinusAll.jsp***/
+input.btn:hover{
+	opacity: 0.8;
 }
 
 /***searchKBTorder.jsp***/

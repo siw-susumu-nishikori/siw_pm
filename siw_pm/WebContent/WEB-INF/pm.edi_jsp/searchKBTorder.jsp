@@ -34,6 +34,59 @@ String today = (String)request.getAttribute("today");
 					});
 				});
 				</script>
+
+				<script>
+				function checkForm1(b){
+					if(document.sabunAll.day1.value == "" && document.sabunAll.day2.value == ""){
+						alert("内示取込日1(前回)\n内示取込日2(今回)\nを入力して下さい。");
+						return false;
+					}else if(document.sabunAll.day1.value == ""){
+						alert("内示取込日1(前回)を入力して下さい。");
+						return false;
+					}else if(document.sabunAll.day2.value == ""){
+						alert("内示取込日2(今回)を入力して下さい。");
+						return false;
+					}else{
+						b.disabled = true;
+						b.value = '処理中';
+						return true;
+					}
+				}
+
+				function checkForm2(b){
+					if(document.sabun.hinban.value == ""){
+						alert("品番を入力して下さい。");
+						return false;
+					}else{
+						b.disabled = true;
+						b.value = '処理中';
+						return true;
+					}
+				}
+
+				function checkForm3(b){
+					if(document.syokai.hinban.value == ""){
+						alert("品番を入力して下さい。");
+						return false;
+					}else{
+						b.disabled = true;
+						b.value = '処理中';
+						return true;
+					}
+				}
+
+				function checkForm4(b){
+					if(document.kabusoku.day1.value == ""){
+						alert("内示取込日を入力して下さい。");
+						return false;
+					}else{
+						b.disabled = true;
+						b.value = '処理中';
+						return true;
+					}
+				}
+				</script>
+
 	</head>
 	<body>
 		<div class="wrapper row1">
@@ -97,10 +150,9 @@ String today = (String)request.getAttribute("today");
 			<!-- [全品番内示差分出力]→[内示差分検索]→[受注検索]→[全品番過不足数出力]順に並び替え -->
 			<article class="search_juchu">
 				<section style="border:solid 1px;">
-					<form method="Post" action="<%=PropertyLoader.getProperty("url.servlet.KBTsabunAllSearch") %>">
+					<form method="Post" name="sabunAll" action="<%=PropertyLoader.getProperty("url.servlet.KBTsabunAllSearch") %>">
 						<p class="caption2">[ 全品番内示差分出力 ]</p>
 						<table class="center">
-
 							<tr>
 								<% while (iteratorKikan4.hasNext()) {KakuteikikanBean item4 = iteratorKikan4.next();%>
 								<td><input type="hidden" name="e_date" value="<%=item4.getE_date()%>"></td>
@@ -109,35 +161,34 @@ String today = (String)request.getAttribute("today");
 							<tr>
 								<th>内示取込日1(前回)</th>
 								<td><input type="text" name="day1" list="insymd_naiji"></td>
-									<datalist id="insymd_naiji">
-									<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
-									<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
-									<%} %>
-									</datalist>
+								<datalist id="insymd_naiji">
+								<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
+								<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
+								<%} %>
+								</datalist>
 								<td align="left"></td>
 							</tr>
 							<tr>
 								<th>内示取込日2(今回)</th>
 								<td><input type="text" name="day2" list="insymd_naiji"></td>
-									<datalist id="insymd_naiji">
-									<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
-									<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
-									<%} %>
-									</datalist>
+								<datalist id="insymd_naiji">
+								<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
+								<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
+								<%} %>
+								</datalist>
 								<td align="left"></td>
 							</tr>
 						</table>
-							<p><input type="submit" value="実行" onclick="this.disabled = true; this.value='処理中';"></p>
+							<p><input type="submit" class="submit_btn" value="実行" onclick="return checkForm1(this);"></p>
 					</form>
 				</section>
 			</article>
 
 			<article class="search_juchu">
 				<section style="border:solid 1px;">
-					<form method="Post" action="<%=PropertyLoader.getProperty("url.servlet.KBTsabunSearch") %>">
+					<form method="Post" name="sabun" action="<%=PropertyLoader.getProperty("url.servlet.KBTsabunSearch") %>">
 						<p class="caption2">[ 内示差分検索 ]</p>
 						<table class="center">
-
 							<tr>
 								<% while (iteratorKikan2.hasNext()) {KakuteikikanBean item2 = iteratorKikan2.next();%>
 								<td><input type="hidden" name="e_date" value="<%=item2.getE_date()%>"></td>
@@ -146,93 +197,93 @@ String today = (String)request.getAttribute("today");
 							<tr>
 								<th>品番</th>
 								<td><input type="text" name="hinban" list="hinban"></td>
-									<datalist id="hinban">
-									<% while (iterator.hasNext()) {KBTItemBean item = iterator.next();%>
-									<option value="<%=item.getHinban()%>"><%=item.getHinban()%></option>
-									<%} %>
-									</datalist>
+								<datalist id="hinban">
+								<% while (iterator.hasNext()) {KBTItemBean item = iterator.next();%>
+								<option value="<%=item.getHinban()%>"><%=item.getHinban()%></option>
+								<%} %>
+								</datalist>
 							</tr>
 							<tr>
 								<th>内示取込日1(前回)</th>
 								<td><input type="text" name="day1" list="insymd_naiji"></td>
-									<datalist id="insymd_naiji">
-									<% while (iteratorNaijiDay3.hasNext()) {KBTItemBean item3 = iteratorNaijiDay3.next();%>
-									<option value="<%=item3.getInsNaijiDay()%>"><%=item3.getInsNaijiDay()%></option>
-									<%} %>
-									</datalist>
+								<datalist id="insymd_naiji">
+								<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
+								<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
+								<%} %>
+								</datalist>
 							</tr>
 							<tr>
 								<th>内示取込日2(今回)</th>
 								<td><input type="text" name="day2" list="insymd_naiji"></td>
-									<datalist id="insymd_naiji">
-									<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
-									<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
-									<%} %>
-									</datalist>
+								<datalist id="insymd_naiji">
+								<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
+								<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
+								<%} %>
+								</datalist>
 							</tr>
 							<tr>
 								<th>表示開始日</th>
 								<td><input type="text" name="hyoujiymd" class="selectDate" value="<%=today%>"></td>
 							</tr>
 						</table>
-						<p><input type="submit" value="検索" onclick="this.disabled = true; this.value='処理中';"></p>
+						<p><input type="submit" class="submit_btn" value="検索" onclick="return checkForm2(this);"></p>
 					</form>
 				</section>
 			</article>
 
 			<article class="search_juchu">
 				<section style="border:solid 1px;">
-					<form method="Post" action="<%=PropertyLoader.getProperty("url.servlet.KBTorderSearch") %>" >
+					<form method="Post" name="syokai" action="<%=PropertyLoader.getProperty("url.servlet.KBTorderSearch") %>" >
 						<p class="caption2">[ 受注照会 ]</p>
 						<table class="center">
 							<tr>
 								<th>品番</th>
 								<td><input type="text" name="hinban" list="hinban"></td>
-									<datalist id="hinban">
-									<% while (iterator.hasNext()) {KBTItemBean item = iterator.next();%>
-									<option value="<%=item.getHinban()%>"><%=item.getHinban()%></option>
-									<%} %>
-									</datalist>
+								<datalist id="hinban">
+								<% while (iterator.hasNext()) {KBTItemBean item = iterator.next();%>
+								<option value="<%=item.getHinban()%>"><%=item.getHinban()%></option>
+								<%} %>
+								</datalist>
 							</tr>
 							<tr>
 								<th>内示取込日1(前回)</th>
 								<td><input type="text" name="day1" list="insymd_naiji"></td>
-									<datalist id="insymd_naiji">
-									<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
-									<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
-									<%} %>
-									</datalist>
+								<datalist id="insymd_naiji">
+								<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
+								<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
+								<%} %>
+								</datalist>
 							</tr>
 							<tr>
 								<th>内示取込日2(中間)</th>
 								<td><input type="text" name="day2" list="insymd_naiji"></td>
-									<datalist id="insymd_naiji">
-									<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
-									<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
-									<%} %>
-									</datalist>
+								<datalist id="insymd_naiji">
+								<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
+								<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
+								<%} %>
+								</datalist>
 							</tr>
 							<tr>
 								<th>内示取込日3(今回)</th>
-									<td><input type="text" name="day3" list="insymd_naiji"></td>
-									<datalist id="insymd_naiji">
-									<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
-									<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
-									<%} %>
-									</datalist>
+								<td><input type="text" name="day3" list="insymd_naiji"></td>
+								<datalist id="insymd_naiji">
+								<% while (iteratorNaijiDay.hasNext()) {KBTItemBean item = iteratorNaijiDay.next();%>
+								<option value="<%=item.getInsNaijiDay()%>"><%=item.getInsNaijiDay()%></option>
+								<%} %>
+								</datalist>
 							</tr>
 							<tr>
 								<th>表示開始日</th>
 								<td><input type="text" name="disp_date" class="selectDate" value="<%=today%>" ></td>
 							</tr>
 						</table>
-							<p><input type="submit" value="検索" onclick="this.disabled = true; this.value='処理中';"></p>
+							<p><input type="submit" class="submit_btn" value="検索" onclick="return checkForm3(this);"></p>
 					</form>
 				</section>
 			</article>
 			<article class="search_juchu">
 				<section class="bottom" style="border:solid 1px;">
-					<form method="Post" action="<%=PropertyLoader.getProperty("url.servlet.KabusokuSearch") %>">
+					<form method="Post" name="kabusoku" action="<%=PropertyLoader.getProperty("url.servlet.KabusokuSearch") %>">
 						<p class="caption2">[ 全品番過不足数出力 ]</p>
 						<table class="center">
 							<tr>
@@ -243,14 +294,14 @@ String today = (String)request.getAttribute("today");
 							<tr>
 								<th>内示取込日</th>
 								<td><input type="text" name="day1" list="insymd_naiji"></td>
-									<datalist id="insymd_naiji">
-									<% while (iteratorDay.hasNext()) {KBTItemBean item = iteratorDay.next();%>
-									<option value="<%=item.getInsymd()%>"><%=item.getInsymd()%></option>
-									<%} %>
-									</datalist>
+								<datalist id="insymd_naiji">
+								<% while (iteratorDay.hasNext()) {KBTItemBean item = iteratorDay.next();%>
+								<option value="<%=item.getInsymd()%>"><%=item.getInsymd()%></option>
+								<%} %>
+								</datalist>
 							</tr>
 						</table>
-							<p><input type="submit" value="実行" onclick="this.disabled = true; this.value='処理中';"></p>
+							<p><input type="submit" class="submit_btn" value="実行" onclick="return checkForm4(this);"></p>
 					</form>
 				</section>
 			</article>

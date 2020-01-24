@@ -39,7 +39,7 @@ public class TanpinZaikoRegister extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		response.setContentType("text/html;charset=UTF-8");
-		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
 
 		Timestamp nowTime= new Timestamp(System.currentTimeMillis());
 		SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");
@@ -74,7 +74,7 @@ public class TanpinZaikoRegister extends HttpServlet {
 			CsvImportDAO csvImportDAO = new CsvImportDAO();
 			csvImportDAO.insertCsv(fr, br, lastModifiedStr);
 
-			resultPage = PropertyLoader.getProperty("url.jsp.importKBTediComplete");
+			resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.importKBTediComplete");
 			br.close(); //2019-12-26追記
 
 		}catch (FileNotFoundException e){

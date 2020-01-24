@@ -29,8 +29,8 @@ public class KBTsabunAllSearch extends HttpServlet {
         // TODO Auto-generated constructor stub
     }
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+System.out.println("=====KBTsabunAllSearch=====");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
 
 		String insymd1 = request.getParameter("day1");
 		String insymd2 = request.getParameter("day2");

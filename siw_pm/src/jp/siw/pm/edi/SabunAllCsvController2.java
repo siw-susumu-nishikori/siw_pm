@@ -147,7 +147,7 @@ public class SabunAllCsvController2 extends HttpServlet {
         }
 
         }else if(disp != null){
-        	String resultPage = PropertyLoader.getProperty("url.jsp.error");
+        	String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
 
         	try{
 
@@ -155,7 +155,7 @@ public class SabunAllCsvController2 extends HttpServlet {
         		List<KBTItemBean> naijiListDay = dao.getNaijiListDay();
         		request.setAttribute("naijiListDay", naijiListDay);
 
-	            resultPage = PropertyLoader.getProperty("url.jsp.inquireKBTsabunMinusAll");
+	            resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.inquireKBTsabunMinusAll");
 
         	} catch (NamingException e) {
         		request.setAttribute("errorMessage", e.getMessage());

@@ -34,36 +34,38 @@ public class SabunAllCsvController extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        //出力するCSVファイル名を設定
-        response.setHeader("Content-Disposition", "attachment; filename=\"KBT_sabunAll.csv\"");
+    	//出力するCSVファイル名を設定
+    	response.setHeader("Content-Disposition", "attachment; filename=\"KBT_sabunAll.csv\"");
 
-        try(PrintWriter pw = response.getWriter()) {
-            KBTediDAO dao = new KBTediDAO();
-            List<KBTItemBean>sabunAllCsvList = dao.getSabunAllCsvList();
-            request.setAttribute("sabunAllCsvList", sabunAllCsvList);
+    	try(PrintWriter pw = response.getWriter()) {
+    		KBTediDAO dao = new KBTediDAO();
+    		List<KBTItemBean>sabunAllCsvList = dao.getSabunAllCsvList();
+    		request.setAttribute("sabunAllCsvList", sabunAllCsvList);
 
-            String header ="\"" + "hinban" + "\"" + "," + "\"" + "nounyushiji_ymd" + "\"" + "," + "\"" + "noba" + "\"" + "," + "\"" + "sabun sry" + "\""  + "\r\n";
-            pw.print(header);
+    		String header ="\"" + "hinban" + "\"" + "," + "\"" + "nounyushiji_ymd" + "\"" + "," + "\"" + "noba" + "\"" + "," + "\"" + "sabun sry" + "\""  + "\r\n";
+    		pw.print(header);
 
-            for (int i = 0; i < sabunAllCsvList.size(); i++) {
-                String hinban = sabunAllCsvList.get(i).getHinban();
-                String nounyushiji_ymd = sabunAllCsvList.get(i).getNounyushiji_ymd();
-                String noba = sabunAllCsvList.get(i).getNoba_cd();
-                int sasu = sabunAllCsvList.get(i).getSasu();
+    		for (int i = 0; i < sabunAllCsvList.size(); i++) {
+    			String hinban = sabunAllCsvList.get(i).getHinban();
+    			String nounyushiji_ymd = sabunAllCsvList.get(i).getNounyushiji_ymd();
+    			String noba = sabunAllCsvList.get(i).getNoba_cd();
+    			int sasu = sabunAllCsvList.get(i).getSasu();
 
-                //CSVファイル内部に記載する形式で文字列を設定
-                String outputString = "\"" + hinban + "\"" + "," + "\"" + nounyushiji_ymd + "\"" + "," + "\"" + noba + "\"" + "," + "\"" + sasu + "\"" + "\r\n";
+    			//CSVファイル内部に記載する形式で文字列を設定
+    			String outputString = "\"" + hinban + "\"" + "," + "\"" + nounyushiji_ymd + "\"" + "," + "\"" + noba + "\"" + "," + "\"" + sasu + "\"" + "\r\n";
 
-                //CSVファイルに書き込み
-                pw.print(outputString);
-            }
+    			//CSVファイルに書き込み
+    			pw.print(outputString);
 
-        } catch (NamingException e) {
-            request.setAttribute("errorMessage", e.getMessage());
+    		}
 
-        } catch (SQLException e) {
-            request.setAttribute("errorMessage", e.getMessage());
-        }
+    	} catch (NamingException e) {
+    		request.setAttribute("errorMessage", e.getMessage());
+
+    	} catch (SQLException e) {
+    		request.setAttribute("errorMessage", e.getMessage());
+
+    	}
 
     }
 

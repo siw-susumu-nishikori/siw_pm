@@ -34,7 +34,7 @@ public class KBTsabunSearch extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
         String hinban = request.getParameter("hinban");
         String insymd1 = request.getParameter("day1");
         String insymd2 = request.getParameter("day2");
@@ -72,7 +72,7 @@ public class KBTsabunSearch extends HttpServlet {
             System.out.println("zaiko_su="+ZaikoList);
             System.out.println("Tsuika_juchuList="+Tsuika_juchuList);
 
-            resultPage = PropertyLoader.getProperty("url.jsp.inquireKBTsabun");
+            resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.inquireKBTsabun");
 
         } catch (NamingException e) {
             request.setAttribute("errorMessage", e.getMessage());

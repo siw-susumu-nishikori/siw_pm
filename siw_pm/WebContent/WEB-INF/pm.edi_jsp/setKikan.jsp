@@ -95,7 +95,7 @@ String today = (String)request.getAttribute("today");
 							</select></td>
 						</tr>
 						<tr>
-							<td style="border: none; padding-top: 10px;"><input type="submit" value="セット" onclick="return submitKikan(this)"></td>
+							<td style="border: none; padding-top: 10px;"><input type="submit" class="submit_btn" value="セット" onclick="return submitKikan(this)"></td>
 						</tr>
 					</table>
 				</form>

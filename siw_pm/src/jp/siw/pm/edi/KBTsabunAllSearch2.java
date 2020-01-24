@@ -35,8 +35,8 @@ public class KBTsabunAllSearch2 extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-
-		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+System.out.println("=====KBTsabunAllSearch2=====");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
 
 		Timestamp nowTime= new Timestamp(System.currentTimeMillis());
         SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");
@@ -50,7 +50,7 @@ public class KBTsabunAllSearch2 extends HttpServlet {
 
         	request.setAttribute("SabunAlluList2", SabunAllList2);
 
-        	resultPage = PropertyLoader.getProperty("url.jsp.inquireKBTsabunAll");
+        	resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.inquireKBTsabunAll");
 
         } catch (NamingException e) {
         	request.setAttribute("errorMessage", e.getMessage());
@@ -59,6 +59,7 @@ public class KBTsabunAllSearch2 extends HttpServlet {
         	request.setAttribute("errorMessage", e.getMessage());
 
         }
+System.out.println("=====KBTsabunAllSearch2 END=====");
         RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
         dispatcher.forward(request, response);
 

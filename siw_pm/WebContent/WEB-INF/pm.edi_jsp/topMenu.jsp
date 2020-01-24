@@ -39,7 +39,7 @@ String today = (String)request.getAttribute("today");
 				<form method="Get" action="<%=PropertyLoader.getProperty("url.servlet.KBTediManager") %>" enctype="multipart/form-data" accept="text/plain,text/csv">
 					<table class="center">
 						<tr>
-							<td><input type="submit" class="top_button" value="クボタEDIデータ取込"  ></td>
+							<td><input type="submit" class="top_button" value="クボタEDIデータ取込" ></td>
 						</tr>
 					</table>
 				</form>

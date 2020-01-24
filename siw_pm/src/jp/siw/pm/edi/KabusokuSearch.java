@@ -35,7 +35,7 @@ public class KabusokuSearch extends HttpServlet {
 	 * @see HttpServlet#doPost(HttpServletRequest request, HttpServletResponse response)
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        String resultPage = PropertyLoader.getProperty("url.jsp.error");
+        String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
         String insymd = request.getParameter("day1");
 
         Timestamp nowTime= new Timestamp(System.currentTimeMillis());
@@ -50,7 +50,7 @@ public class KabusokuSearch extends HttpServlet {
             List<KBTItemBean> kabusokuList = dao.getKabusokuList(insymd, toDay, e_date);
             request.setAttribute("kabusokuList", kabusokuList);
 
-            resultPage = PropertyLoader.getProperty("url.jsp.inquireKabusoku");
+            resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.inquireKabusoku");
 
         } catch (NamingException e) {
             request.setAttribute("errorMessage", e.getMessage());

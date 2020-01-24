@@ -33,7 +33,7 @@ public class KBTorderSearch extends HttpServlet {
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
 
         String hinban = request.getParameter("hinban");
         String insymd1 = request.getParameter("day1");
@@ -61,7 +61,7 @@ public class KBTorderSearch extends HttpServlet {
             List<KBTItemBean> itemListOrder = dao.getItemListOrder(hinban, insymd1, insymd2, insymd3, dispDate);
             request.setAttribute("itemListOrder", itemListOrder);
 
-            resultPage = PropertyLoader.getProperty("url.jsp.inquireKBTorder");
+            resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.inquireKBTorder");
 
         } catch (NamingException e) {
             request.setAttribute("errorMessage", e.getMessage());

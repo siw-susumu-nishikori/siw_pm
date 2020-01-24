@@ -40,7 +40,7 @@ public class KBTnaiji_juchuRegister extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		request.setCharacterEncoding("UTF-8");
-		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
 		List<KBTItemBean> kb35juchuList = Cast.castList(request.getAttribute("itemList"));
 		Iterator<KBTItemBean> iterator = kb35juchuList.iterator();
 		List<KBTItemBean> juchuList = Cast.castList(request.getAttribute("juchuList"));
@@ -108,7 +108,7 @@ System.out.println(Arrays.toString(hinban));
 
 	    }
 
-	    resultPage = PropertyLoader.getProperty("url.jsp.importKBTediComplete");
+	    resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.importKBTediComplete");
         RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
         dispatcher.forward(request, response);
 

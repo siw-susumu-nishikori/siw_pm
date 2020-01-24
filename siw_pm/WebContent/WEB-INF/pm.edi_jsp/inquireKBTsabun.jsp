@@ -107,7 +107,7 @@ String today = (String)request.getAttribute("today");
 				<form method="Post" class="order_search" target="_blank" action="<%=PropertyLoader.getProperty("url.servlet.KBTorderSearch") %>" >
 					<table>
 						<tr>
-							<td class="border-none">品番：<%out.println(hinban); %></td>
+							<td class="hinban">品番：<%out.println(hinban); %></td>
 						</tr>
 					</table>
 					<table class="order_search" style="clear:both;">
@@ -119,7 +119,7 @@ String today = (String)request.getAttribute("today");
 									<%} %>
 								</datalist>
 							<td class="border-none">表示開始日：<input type="text" style="width:100px;" name="disp_date" class="selectDate" value="<%=today%>"></td>
-							<td class="border-none"><input type="submit" value="受注照会へ"></td>
+							<td class="border-none"><input type="submit" class="btn" value="受注照会へ"></td>
 						</tr>
 					</table>
 						<input type="hidden" name="hinban" value="<%out.print(hinban); %>">

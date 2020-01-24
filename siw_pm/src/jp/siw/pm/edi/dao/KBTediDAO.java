@@ -22,10 +22,13 @@ import jp.siw.pm.edi.bean.KBTItemBean;
 import jp.siw.pm.edi.bean.KBTNvanBean;
 
 public class KBTediDAO{
-	 private static final String INSERT  = "insert into kb_35_hibetsunaiji values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?,"
-	 											+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
-	 											+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
-	 											+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+	 private static final String INSERT  = "insert into kb_35_hibetsunaiji values(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+	 																			+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+	 																			+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+	 																			+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+	 																			+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+	 																			+ "?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, "
+	 																			+ "?, ?, ?, ?, ?)";
 	 private static final String SELECT_insertDay = "select * from kb_35_hibetsunaiji where insertDay=?";
 	 private static final String SELECT_insymd = "select * from t_juchu_test where insymd=?";
 	 private static final String SELECT_hinban = "select hinban from t_juchu_test group by hinban";
@@ -1236,479 +1239,342 @@ public class KBTediDAO{
 	 }
 
 
-	     //品番指定で数量差と差分検索
-	    public List<KBTItemBean>getSabunList(String hinban, String insymd1, String insymd2, String hyoujiymd, HttpServletRequest request, HttpServletResponse response ) throws SQLException {
-
-	         List<KBTItemBean>SabunList = new ArrayList<KBTItemBean> ();
-             List<String>sasuList = new ArrayList<String>();
-	         Connection connection = source.getConnection();
-	         List<CsvImportBean>ZaikoList = new ArrayList<CsvImportBean> ();
-
-	         try {
-	             PreparedStatement statement = connection.prepareStatement(SELECT_sabun);
-	             statement.setString(1, insymd2);
-	             statement.setString(2, insymd1);
-	             statement.setString(3, insymd2);
-	             statement.setString(4, insymd1);
-	             statement.setString(5, hinban);
-	             statement.setString(6, hyoujiymd);
-	             ResultSet result = statement.executeQuery();
-
-	             while (result.next()) {
-	            	 KBTItemBean item = new KBTItemBean();
-	                 item.setNounyushiji_ymd(result.getString("nounyushiji_ymd"));
-	                 item.setNoba_cd(result.getString("noba_cd"));
-	                 item.setQty1(result.getInt("qty1"));
-	                 item.setQty2(result.getInt("qty2"));
-	                 item.setSu_sa(result.getInt("su_sa"));
-	                 SabunList.add(item);
-	                 System.out.println(item);
-	             }
-
-	             List<String>qtyList1 = new ArrayList<String>();
-	             List<String>qtyList2 = new ArrayList<String>();
-	             Iterator<KBTItemBean> iterator = SabunList.iterator();
-	             while (iterator.hasNext()) {KBTItemBean item2 = iterator.next();
-	             int Qty1 = item2.getQty1();
-	             int Qty2 = item2.getQty2();
-	             qtyList1.add(Integer.toString(Qty1));
-	             qtyList2.add(Integer.toString(Qty2));
-	             }
-
-	             System.out.println("CCC="+qtyList1);
-	             System.out.println("DDD="+qtyList2);
-
-	             int sasu = 0;
-	             for(int i=0; i<qtyList2.size(); i++){
-	            	 if(i==0){
-	            		 sasu = Integer.parseInt(qtyList2.get(i)) - Integer.parseInt(qtyList1.get(i));
-	            	 }else if(i==1){
-	            		 sasu = ((Integer.parseInt(qtyList2.get(i-1)) - Integer.parseInt(qtyList1.get(i-1)))+Integer.parseInt(qtyList2.get(i))) - Integer.parseInt(qtyList1.get(i));
-	            	 }else{
-	            		 sasu = Integer.parseInt(sasuList.get(i-1))+Integer.parseInt(qtyList2.get(i)) - Integer.parseInt(qtyList1.get(i));
-	            	 }
-            		 sasuList.add(Integer.toString(sasu));
-		             System.out.println("EEE="+sasu );
-	             }
-
-	             System.out.println("FFF="+sasuList );
-	             request.setAttribute("sasuList", sasuList);
-
-	             PreparedStatement statement2 = connection.prepareStatement(SELECT_tanpin_zaiko);
-	             statement2.setString(1, hinban);
-	             ResultSet result2 = statement2.executeQuery();
-                 System.out.println("result2="+result2);
-	             while (result2.next()) {
-	             CsvImportBean item3 = new CsvImportBean();
-                 item3.setMysry(result2.getDouble("mysry"));
-                 item3.setKoshin_ymd(result2.getString("koshin_ymd"));
-	             System.out.println("ABC="+item3);
-                 ZaikoList.add(item3);
-	             }
-
-	             request.setAttribute("ZaikoList", ZaikoList);
-
-	         } catch (SQLException e) {
-	             e.printStackTrace();
-	         } finally {
-	             if (connection != null) {
-	                 connection.close();
-	             }
-
-	         }
-	         return SabunList;
-	     }
-
-
-	     //差分数マイナス品番指定で数量差と差分検索
-/**	    public List<KBTItemBean>getSabunMinusList(String[] hinban, String insymd1, String insymd2, String hyoujiymd, HttpServletRequest request, HttpServletResponse response ) throws SQLException {
-	         //List<KBTItemBean>MinusAllList = new ArrayList<KBTItemBean> ();
-	         List<KBTItemBean>SabunMinusList = new ArrayList<KBTItemBean> ();
-	         List<String>sasuList = new ArrayList<String>();
-	         Connection connection = source.getConnection();
-	         List<CsvImportBean>ZaikoList = new ArrayList<CsvImportBean> ();
-
-	         try {
-	             System.out.println("=====DAO START=====");
-	             PreparedStatement statement = connection.prepareStatement(SELECT_sabun);
-	             for(int i=0; i < hinban.length; i++){
-		             statement.setString(1, insymd2);
-		             statement.setString(2, insymd1);
-		             statement.setString(3, insymd2);
-		             statement.setString(4, insymd1);
-		             statement.setString(5, hinban[i]);
-		             statement.setString(6, hyoujiymd);
-		             System.out.println("hinban"+Arrays.toString(hinban));
-		             System.out.println("insymd1="+insymd1);
-		             System.out.println("insymd2="+insymd2);
-		             System.out.println("hyoujiymd="+hyoujiymd);
-		             ResultSet result = statement.executeQuery();
-
-		             System.out.println("++++++++++++++++++");
-
-		             while (result.next()) {
-			             System.out.println("@@@@@@@@@@@@@@@@@@@");
-		            	 KBTItemBean item = new KBTItemBean();
-		                 item.setHinban(result.getString("hinban"));
-		                 item.setNounyushiji_ymd(result.getString("nounyushiji_ymd"));
-		                 item.setNoba_cd(result.getString("noba_cd"));
-		                 item.setQty1(result.getInt("qty1"));
-		                 item.setQty2(result.getInt("qty2"));
-		                 item.setSu_sa(result.getInt("su_sa"));
-		                 SabunMinusList.add(item);
-		             }
-
-		         System.out.println("SabunMinusList="+SabunMinusList);
-	             System.out.println("******************");
-
-	             List<String>qtyList1 = new ArrayList<String>();
-	             List<String>qtyList2 = new ArrayList<String>();
-	             Iterator<KBTItemBean> iterator = SabunMinusList.iterator();
-	             while (iterator.hasNext()) {KBTItemBean item2 = iterator.next();
-	             int Qty1 = item2.getQty1();
-	             int Qty2 = item2.getQty2();
-	             //System.out.println("Qty1="+Qty1);
-	             //System.out.println("Qty2="+Qty2);
-	             qtyList1.add(Integer.toString(Qty1));
-	             qtyList2.add(Integer.toString(Qty2));
-	             }
-
-	             System.out.println("qtyList1="+qtyList1);
-	             System.out.println("qtyList2="+qtyList2);
-
-	             int sasu = 0;
-	             for(int j=0; j<qtyList2.size(); j++){
-	            	 if(j==0){
-	            		 sasu = Integer.parseInt(qtyList2.get(j)) - Integer.parseInt(qtyList1.get(j));
-	            	 }else if(j==1){
-	            		 sasu = ((Integer.parseInt(qtyList2.get(j-1)) - Integer.parseInt(qtyList1.get(j-1)))+Integer.parseInt(qtyList2.get(j))) - Integer.parseInt(qtyList1.get(j));
-	            	 }else{
-	            		 sasu = Integer.parseInt(sasuList.get(j-1))+Integer.parseInt(qtyList2.get(j)) - Integer.parseInt(qtyList1.get(j));
-	            	 }
-           		 sasuList.add(Integer.toString(sasu));
-		             //System.out.println("EEE="+sasu );
-	             }
-
-	             System.out.println("sasuList="+sasuList );
-	             request.setAttribute("sasuList", sasuList);
-
-
-
-	             PreparedStatement statement2 = connection.prepareStatement(SELECT_tanpin_zaiko);
-	             for(int j=0; j<hinban.length; j++){
-	             statement2.setString(1, hinban[j]);
-	             ResultSet result2 = statement2.executeQuery();
-                System.out.println("result!!="+result2);
-	             while (result2.next()) {
-	             CsvImportBean item3 = new CsvImportBean();
-                item3.setMysry(result2.getDouble("mysry"));
-                item3.setKoshin_ymd(result2.getString("koshin_ymd"));
-	             System.out.println("ABC="+item3);
-                ZaikoList.add(item3);
-	             }
-	             System.out.println("ZaikoList="+ZaikoList);
-	             request.setAttribute("ZaikoList", ZaikoList);
-	             System.out.println("???????????????????");
-	             }
-
-	             }
-
-
-	         } catch (SQLException e) {
-	             e.printStackTrace();
-	         } finally {
-	             if (connection != null) {
-	                 connection.close();
-	             }
-
-	         }
-             //2020/01/07
-             MinusAllList.addAll(SabunMinusList);
-	         System.out.println("MinusAllList="+MinusAllList);
-             request.setAttribute("MinusAllList", MinusAllList);
-	         return SabunMinusList;
-
-	     }
-**/
-
-	     //
-	    public List<KBTItemBean> getTsuika_juchuList(String hinban, String toDay) throws SQLException {
-
-	         List<KBTItemBean>Tsuika_juchuList = new ArrayList<KBTItemBean> ();
-	         Connection connection = source.getConnection();
-
-	         try {
-	             PreparedStatement statement = connection.prepareStatement(SELECT_tsuika_juchu);
-	             statement.setString(1, hinban);
-	             statement.setString(2, toDay);
-	             ResultSet result = statement.executeQuery();
-
-	             while (result.next()) {
-	            	 KBTItemBean item = new KBTItemBean();
-	                 item.setHinban(result.getString("hinban"));
-	                 item.setNoba_cd(result.getString("noba_cd"));
-	                 item.setNounyushiji_ymd(result.getString("nounyushiji_ymd"));
-	                 item.setJuchu_su(result.getString("juchu_su"));
-	                 Tsuika_juchuList.add(item);
-	             }
-
-	         } catch (SQLException e) {
-	             e.printStackTrace();
-	         } finally {
-	             if (connection != null) {
-	                 connection.close();
-	             }
-	         }
-	         return Tsuika_juchuList;
-	     }
-
-
-	     //差分数マイナス品番
-/**	    public List<KBTItemBean> getTsuika_juchuMinusList(String[] hinban, String toDay) throws SQLException {
-
-	         List<KBTItemBean>Tsuika_juchuMinusList = new ArrayList<KBTItemBean> ();
-	         Connection connection = source.getConnection();
-
-	         try {
-	             PreparedStatement statement = connection.prepareStatement(SELECT_tsuika_juchu);
-	             for(int i=0; i<hinban.length; i++){
-	             statement.setString(1, hinban[i]);
-	             statement.setString(2, toDay);
-	             ResultSet result = statement.executeQuery();
-
-	             while (result.next()) {
-	            	 KBTItemBean item = new KBTItemBean();
-	                 item.setHinban(result.getString("hinban"));
-	                 item.setNoba_cd(result.getString("noba_cd"));
-	                 item.setNounyushiji_ymd(result.getString("nounyushiji_ymd"));
-	                 item.setJuchu_su(result.getString("juchu_su"));
-	                 Tsuika_juchuMinusList.add(item);
-	             }
-
-	             }
-	         } catch (SQLException e) {
-	             e.printStackTrace();
-	         } finally {
-	             if (connection != null) {
-	                 connection.close();
-	             }
-	         }
-	         return Tsuika_juchuMinusList;
-	     }
-**/
-
-	     //t_juchuから品番、取込日、期間(当日～確定期間末日)を指定して受注合計数を取得
-	    public List<KBTItemBean> getKikanZaikoList(String hinban, String insymd2, String toDay, String e_date) throws SQLException {
-
-	         List<KBTItemBean>KikanZaikoList = new ArrayList<KBTItemBean> ();
-	         Connection connection = source.getConnection();
-
-	         try {
-	             PreparedStatement statement = connection.prepareStatement(SELECT_Kikan_Zaiko);
-	             statement.setString(1, hinban);
-	             statement.setString(2, insymd2);
-	             statement.setString(3, toDay);
-	             statement.setString(4, e_date);
-	             statement.setString(5, hinban);
-	             statement.setString(6, toDay);
-	             statement.setString(7, e_date);
-	             ResultSet result = statement.executeQuery();
-
-	             while (result.next()) {
-	            	 KBTItemBean item = new KBTItemBean();
-	                 item.setTotal_qty(result.getInt("Total_Qty"));
-	                 KikanZaikoList.add(item);
-	             }
-
-	         } catch (SQLException e) {
-	             e.printStackTrace();
-	         } finally {
-	             if (connection != null) {
-	                 connection.close();
-	             }
-	         }
-	         return KikanZaikoList;
-	     }
-
-
-	     //差分数マイナス品番　t_juchuから品番、取込日、期間(当日～確定期間末日)を指定して受注合計数を取得
-/**	    public List<KBTItemBean> getKikanZaikoMinusList(String[] hinban, String insymd2, String toDay, String e_date) throws SQLException {
-
-	         List<KBTItemBean>KikanZaikoMinusList = new ArrayList<KBTItemBean> ();
-	         Connection connection = source.getConnection();
-
-	         try {
-	             PreparedStatement statement = connection.prepareStatement(SELECT_Kikan_Zaiko);
-	             for(int i=0; i<hinban.length; i++){
-	             statement.setString(1, hinban[i]);
-	             statement.setString(2, insymd2);
-	             statement.setString(3, toDay);
-	             statement.setString(4, e_date);
-	             statement.setString(5, hinban[i]);
-	             statement.setString(6, toDay);
-	             statement.setString(7, e_date);
-	             ResultSet result = statement.executeQuery();
-
-	             while (result.next()) {
-	            	 KBTItemBean item = new KBTItemBean();
-	                 item.setTotal_qty(result.getInt("Total_Qty"));
-	                 KikanZaikoMinusList.add(item);
-	             }
-
-	             }
-
-	         } catch (SQLException e) {
-	             e.printStackTrace();
-	         } finally {
-	             if (connection != null) {
-	                 connection.close();
-	             }
-	         }
-	         return KikanZaikoMinusList;
-	     }
-**/
-
-	     //全品番ソートして差分検索
-	    public List<KBTItemBean>getSabunAllList(String insymd1, String insymd2) throws SQLException {
-
-	        List<KBTItemBean>SabunAllList = new ArrayList<KBTItemBean> ();
-	         Connection connection = source.getConnection();
-
-	         try {
-	        	 PreparedStatement statement = connection.prepareStatement(DELETE_sabun_all);
-	        	 statement.executeUpdate();
-	             PreparedStatement statement2 = connection.prepareStatement(SELECT_sabunAll);
-	             statement2.setString(1, insymd2);
-	             statement2.setString(2, insymd1);
-	             statement2.setString(3, insymd2);
-	             statement2.setString(4, insymd1);
-	             ResultSet result = statement2.executeQuery();
-
-	             while (result.next()) {
-	            	 KBTItemBean item = new KBTItemBean();
-	            	 item.setHinban(result.getString("hinban"));
-	                 item.setNounyushiji_ymd(result.getString("nounyushiji_ymd"));
-	                 item.setNoba_cd(result.getString("noba_cd"));
-	                 item.setQty1(result.getInt("qty1"));
-	                 item.setQty2(result.getInt("qty2"));
-	                 item.setSu_sa(result.getInt("su_sa"));
-
-	                 SabunAllList.add(item);
-	                 //System.out.println(item);
-
-	             }
-
-		       Iterator<KBTItemBean> iterator = SabunAllList.iterator();
-		         while (iterator.hasNext()) {KBTItemBean item2 = iterator.next();
-
-		         String hinban = item2.getHinban();
-		         String nounyushiji_ymd = item2.getNounyushiji_ymd();
-		         String noba_cd = item2.getNoba_cd();
-		         int qty1 = item2.getQty1();
-		         int qty2 = item2.getQty2();
-		         int su_sa = item2.getSu_sa();
-		         Timestamp nowTime= new Timestamp(System.currentTimeMillis());
-		         SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy/MM/dd");
-		         SimpleDateFormat timeStampNowTime = new SimpleDateFormat("HH:mm:ss");
-		         String insertDay = timeStampNowDay.format(nowTime);
-		         String insertTime = timeStampNowTime.format(nowTime);
-
-			     	PreparedStatement statement3 = connection.prepareStatement(INSERT_sabun_all);
-			    	statement3.setString(1, hinban);
-			    	statement3.setString(2, nounyushiji_ymd);
-			    	statement3.setString(3, noba_cd);
-			    	statement3.setInt(4, qty1);
-			    	statement3.setInt(5, qty2);
-			    	statement3.setInt(6, su_sa);
-			    	statement3.setString(7, insertDay);
-			    	statement3.setString(8, insertTime);
-			    	statement3.executeUpdate();
-		         }
-
-			    } catch (SQLException e) {
-			    	e.printStackTrace();
-			    	} finally {
-			    		if (connection != null) {
-			    			connection.close();
-			    			}
-			    	}
-					return SabunAllList;
-
-	    }
-
-
-	     //kb_sabun_allから品番一覧の取得
-	    public List<KBTItemBean> getSabunAllList2() throws SQLException {
-
-	         List<KBTItemBean>sb_hinbanList2 = new ArrayList<KBTItemBean> ();
-	         Connection connection = source.getConnection();
-
-	         try {
-	        	 PreparedStatement statement = connection.prepareStatement(DELETE_sabun_aggr);
-	        	 statement.executeUpdate();
-	             PreparedStatement statement2 = connection.prepareStatement(SELECT_sabun_hinban);
-	             ResultSet result2 = statement2.executeQuery();
-
-	             while (result2.next()) {
-	                 String hinban = result2.getString("hinban");
-
-	             PreparedStatement statement3 = connection.prepareStatement(SELECT_sabun_all);
-	             ResultSet result3 = statement3.executeQuery();
-
-	             List<String>sasuList2 = null;
-	             List<String>shiji_ymdList = new ArrayList<String>();
-	             List<String>nobaList = new ArrayList<String>();
-	             while (result3.next()) {
-
-                	 String hinban2 = result3.getString("hinban");
-
-	                	 if(hinban.equals(hinban2)){
-	    		             PreparedStatement statement4 = connection.prepareStatement("select * from kb_sabun_all where hinban='" + hinban +  "\'" );
-	    		             ResultSet result4 = statement4.executeQuery();
-
-	    		             List<String>qtyList1 = new ArrayList<String>();
-	    		             List<String>qtyList2 = new ArrayList<String>();
-
-	    		             while (result4.next()) {
-	    	                 String Nounyushiji_ymd = (result4.getString("nounyushiji_ymd"));
-	    	                 String Noba_cd = (result4.getString("noba_cd"));
-	    		             int Qty1 = (result4.getInt("qty1"));
-	    		             int Qty2 = (result4.getInt("qty2"));
-	    		             qtyList1.add(Integer.toString(Qty1));
-	    		             qtyList2.add(Integer.toString(Qty2));
-	    		             shiji_ymdList.add(Nounyushiji_ymd);
-	    		             nobaList.add(Noba_cd);
-
-	    		             //System.out.println("CCC="+qtyList1);
-	    		             //System.out.println("DDD="+qtyList2);
-
-	    		             }
-	    		             //System.out.println("size="+qtyList2.size());
-
-	    		             sasuList2 = new ArrayList<String>();
-	    		             int sasu = 0;
-	    		             for(int i=0; i<qtyList2.size(); i++){
-	    		            	 if(i==0){
-	    		            		 sasu = Integer.parseInt(qtyList2.get(i)) - Integer.parseInt(qtyList1.get(i));
-	    		            	 }else if(i==1){
-	    		            		 sasu = ((Integer.parseInt(qtyList2.get(i-1)) - Integer.parseInt(qtyList1.get(i-1)))+Integer.parseInt(qtyList2.get(i))) - Integer.parseInt(qtyList1.get(i));
-	    		            	 }else{
-	    		            		 sasu = Integer.parseInt(sasuList2.get(i-1))+Integer.parseInt(qtyList2.get(i)) - Integer.parseInt(qtyList1.get(i));
-	    		            	 }
-	    	            		 sasuList2.add(Integer.toString(sasu));
-	    			             System.out.println("EEE="+sasu );
-
-	    		             }
-
-	                	 }else{
-
-	                	 }
-
-	             }
-
-	             PreparedStatement statement5 = connection.prepareStatement(INSERT_sabun_aggr);
-	             for(int i=0; i<sasuList2.size(); i++){
-	            	 String nounyushiji_ymd = shiji_ymdList.get(i);
+	 //品番指定で数量差と差分検索
+	 public List<KBTItemBean>getSabunList(String hinban, String insymd1, String insymd2, String hyoujiymd, HttpServletRequest request, HttpServletResponse response ) throws SQLException {
+		 Connection connection = source.getConnection();
+
+		 List<KBTItemBean>SabunList = new ArrayList<KBTItemBean> ();
+		 List<String>sasuList = new ArrayList<String>();
+		 List<CsvImportBean>ZaikoList = new ArrayList<CsvImportBean> ();
+
+		 try {
+
+			 PreparedStatement statement = connection.prepareStatement(SELECT_sabun);
+			 statement.setString(1, insymd2);
+			 statement.setString(2, insymd1);
+			 statement.setString(3, insymd2);
+			 statement.setString(4, insymd1);
+			 statement.setString(5, hinban);
+			 statement.setString(6, hyoujiymd);
+			 ResultSet result = statement.executeQuery();
+
+			 while (result.next()) {
+				 KBTItemBean item = new KBTItemBean();
+				 item.setNounyushiji_ymd(result.getString("nounyushiji_ymd"));
+				 item.setNoba_cd(result.getString("noba_cd"));
+				 item.setQty1(result.getInt("qty1"));
+				 item.setQty2(result.getInt("qty2"));
+				 item.setSu_sa(result.getInt("su_sa"));
+				 SabunList.add(item);
+				 System.out.println(item);
+
+			 }
+
+			 List<String>qtyList1 = new ArrayList<String>();
+			 List<String>qtyList2 = new ArrayList<String>();
+
+			 Iterator<KBTItemBean> iterator = SabunList.iterator();
+			 while (iterator.hasNext()) {KBTItemBean item2 = iterator.next();
+			 int Qty1 = item2.getQty1();
+			 int Qty2 = item2.getQty2();
+			 qtyList1.add(Integer.toString(Qty1));
+			 qtyList2.add(Integer.toString(Qty2));
+
+			 }
+
+			 System.out.println("CCC="+qtyList1);
+			 System.out.println("DDD="+qtyList2);
+
+			 int sasu = 0;
+			 for(int i=0; i<qtyList2.size(); i++){
+				 if(i==0){
+					 sasu = Integer.parseInt(qtyList2.get(i)) - Integer.parseInt(qtyList1.get(i));
+					 }else if(i==1){
+						 sasu = ((Integer.parseInt(qtyList2.get(i-1)) - Integer.parseInt(qtyList1.get(i-1)))+Integer.parseInt(qtyList2.get(i))) - Integer.parseInt(qtyList1.get(i));
+
+					 }else{
+						 sasu = Integer.parseInt(sasuList.get(i-1))+Integer.parseInt(qtyList2.get(i)) - Integer.parseInt(qtyList1.get(i));
+
+					 }
+				 sasuList.add(Integer.toString(sasu));
+				 System.out.println("EEE="+sasu );
+
+			 }
+
+			 System.out.println("FFF="+sasuList );
+			 request.setAttribute("sasuList", sasuList);
+
+			 PreparedStatement statement2 = connection.prepareStatement(SELECT_tanpin_zaiko);
+			 statement2.setString(1, hinban);
+			 ResultSet result2 = statement2.executeQuery();
+			 System.out.println("result2="+result2);
+
+			 while (result2.next()) {
+				 CsvImportBean item3 = new CsvImportBean();
+				 item3.setMysry(result2.getDouble("mysry"));
+				 item3.setKoshin_ymd(result2.getString("koshin_ymd"));
+				 System.out.println("ABC="+item3);
+				 ZaikoList.add(item3);
+
+			 }
+
+			 request.setAttribute("ZaikoList", ZaikoList);
+
+		 } catch (SQLException e) {
+			 e.printStackTrace();
+
+		 } finally {
+			 if (connection != null) {
+				 connection.close();
+
+			 }
+
+		 }
+
+		 return SabunList;
+
+	 }
+
+
+	 //
+	 public List<KBTItemBean> getTsuika_juchuList(String hinban, String toDay) throws SQLException {
+		 Connection connection = source.getConnection();
+
+		 List<KBTItemBean>Tsuika_juchuList = new ArrayList<KBTItemBean> ();
+
+		 try {
+
+			 PreparedStatement statement = connection.prepareStatement(SELECT_tsuika_juchu);
+			 statement.setString(1, hinban);
+			 statement.setString(2, toDay);
+			 ResultSet result = statement.executeQuery();
+
+			 while (result.next()) {
+				 KBTItemBean item = new KBTItemBean();
+				 item.setHinban(result.getString("hinban"));
+				 item.setNoba_cd(result.getString("noba_cd"));
+				 item.setNounyushiji_ymd(result.getString("nounyushiji_ymd"));
+				 item.setJuchu_su(result.getString("juchu_su"));
+				 Tsuika_juchuList.add(item);
+
+			 }
+
+		 } catch (SQLException e) {
+			 e.printStackTrace();
+
+		 } finally {
+			 if (connection != null) {
+				 connection.close();
+
+			 }
+
+		 }
+
+		 return Tsuika_juchuList;
+
+	 }
+
+
+	 //t_juchuから品番、取込日、期間(当日～確定期間末日)を指定して受注合計数を取得
+	 public List<KBTItemBean> getKikanZaikoList(String hinban, String insymd2, String toDay, String e_date) throws SQLException {
+		 Connection connection = source.getConnection();
+
+		 List<KBTItemBean>KikanZaikoList = new ArrayList<KBTItemBean> ();
+
+		 try {
+
+			 PreparedStatement statement = connection.prepareStatement(SELECT_Kikan_Zaiko);
+			 statement.setString(1, hinban);
+			 statement.setString(2, insymd2);
+			 statement.setString(3, toDay);
+			 statement.setString(4, e_date);
+			 statement.setString(5, hinban);
+			 statement.setString(6, toDay);
+			 statement.setString(7, e_date);
+			 ResultSet result = statement.executeQuery();
+
+			 while (result.next()) {
+				 KBTItemBean item = new KBTItemBean();
+				 item.setTotal_qty(result.getInt("Total_Qty"));
+				 KikanZaikoList.add(item);
+
+			 }
+
+		 } catch (SQLException e) {
+			 e.printStackTrace();
+
+		 } finally {
+			 if (connection != null) {
+				 connection.close();
+
+			 }
+
+		 }
+
+		 return KikanZaikoList;
+
+	 }
+
+
+	 //全品番ソートして差分検索
+	 public List<KBTItemBean>getSabunAllList(String insymd1, String insymd2) throws SQLException {
+		 Connection connection = source.getConnection();
+
+		 List<KBTItemBean>SabunAllList = new ArrayList<KBTItemBean> ();
+
+		 try {
+
+			 System.out.println("=====SabunAllList DEL=====");
+			 PreparedStatement statement = connection.prepareStatement(DELETE_sabun_all);
+			 statement.executeUpdate();
+
+			 System.out.println("=====SabunAllList SELECT=====");
+			 PreparedStatement statement2 = connection.prepareStatement(SELECT_sabunAll);
+			 statement2.setString(1, insymd2);
+			 statement2.setString(2, insymd1);
+			 statement2.setString(3, insymd2);
+			 statement2.setString(4, insymd1);
+			 ResultSet result = statement2.executeQuery();
+			 System.out.println("=====SabunAllList SELECT while=====");
+
+			 int i=0;
+			 while (result.next()) {
+				 KBTItemBean item = new KBTItemBean();
+				 item.setHinban(result.getString("hinban"));
+				 item.setNounyushiji_ymd(result.getString("nounyushiji_ymd"));
+				 item.setNoba_cd(result.getString("noba_cd"));
+				 item.setQty1(result.getInt("qty1"));
+				 item.setQty2(result.getInt("qty2"));
+				 item.setSu_sa(result.getInt("su_sa"));
+
+				 SabunAllList.add(item);
+				 i++;
+				 System.out.println(i);
+
+			 }
+
+			 System.out.println("=====SabunAllList iterator=====");
+			 Iterator<KBTItemBean> iterator = SabunAllList.iterator();
+			 while (iterator.hasNext()) {KBTItemBean item2 = iterator.next();
+			 int j=0;
+			 String hinban = item2.getHinban();
+			 String nounyushiji_ymd = item2.getNounyushiji_ymd();
+			 String noba_cd = item2.getNoba_cd();
+			 int qty1 = item2.getQty1();
+			 int qty2 = item2.getQty2();
+			 int su_sa = item2.getSu_sa();
+			 Timestamp nowTime= new Timestamp(System.currentTimeMillis());
+			 SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy/MM/dd");
+			 SimpleDateFormat timeStampNowTime = new SimpleDateFormat("HH:mm:ss");
+			 String insertDay = timeStampNowDay.format(nowTime);
+			 String insertTime = timeStampNowTime.format(nowTime);
+
+			 PreparedStatement statement3 = connection.prepareStatement(INSERT_sabun_all);
+			 statement3.setString(1, hinban);
+			 statement3.setString(2, nounyushiji_ymd);
+			 statement3.setString(3, noba_cd);
+			 statement3.setInt(4, qty1);
+			 statement3.setInt(5, qty2);
+			 statement3.setInt(6, su_sa);
+			 statement3.setString(7, insertDay);
+			 statement3.setString(8, insertTime);
+			 statement3.executeUpdate();
+			 j++;
+			 System.out.println(j);
+
+			 }
+
+			 System.out.println("=====SabunAllList After Insert=====");
+
+		 } catch (SQLException e) {
+			 e.printStackTrace();
+
+		 } finally {
+			 if (connection != null) {
+				 connection.close();
+
+			 }
+
+		 }
+
+		 System.out.println("=====SabunAllList END=====");
+		 return SabunAllList;
+
+	 }
+
+
+	 //kb_sabun_allから品番一覧の取得
+	 public List<KBTItemBean> getSabunAllList2() throws SQLException {
+		 Connection connection = source.getConnection();
+
+		 List<KBTItemBean>sb_hinbanList2 = new ArrayList<KBTItemBean> ();
+
+		 try {
+
+			 PreparedStatement statement = connection.prepareStatement(DELETE_sabun_aggr);
+			 statement.executeUpdate();
+
+			 PreparedStatement statement2 = connection.prepareStatement(SELECT_sabun_hinban);
+			 ResultSet result2 = statement2.executeQuery();
+
+			 while (result2.next()) {
+				 String hinban = result2.getString("hinban");
+
+				 PreparedStatement statement3 = connection.prepareStatement(SELECT_sabun_all);
+				 ResultSet result3 = statement3.executeQuery();
+
+				 List<String>sasuList2 = null;
+				 List<String>shiji_ymdList = new ArrayList<String>();
+				 List<String>nobaList = new ArrayList<String>();
+
+				 while (result3.next()) {
+					 String hinban2 = result3.getString("hinban");
+
+					 if(hinban.equals(hinban2)){
+						 PreparedStatement statement4 = connection.prepareStatement("select * from kb_sabun_all where hinban='" + hinban +  "\'" );
+						 ResultSet result4 = statement4.executeQuery();
+
+						 List<String>qtyList1 = new ArrayList<String>();
+						 List<String>qtyList2 = new ArrayList<String>();
+
+						 while (result4.next()) {
+							 String Nounyushiji_ymd = (result4.getString("nounyushiji_ymd"));
+							 String Noba_cd = (result4.getString("noba_cd"));
+							 int Qty1 = (result4.getInt("qty1"));
+							 int Qty2 = (result4.getInt("qty2"));
+							 qtyList1.add(Integer.toString(Qty1));
+							 qtyList2.add(Integer.toString(Qty2));
+							 shiji_ymdList.add(Nounyushiji_ymd);
+							 nobaList.add(Noba_cd);
+
+						 }
+
+						 sasuList2 = new ArrayList<String>();
+						 int sasu = 0;
+						 for(int i=0; i<qtyList2.size(); i++){
+							 if(i==0){
+								 sasu = Integer.parseInt(qtyList2.get(i)) - Integer.parseInt(qtyList1.get(i));
+
+							 }else if(i==1){
+								 sasu = ((Integer.parseInt(qtyList2.get(i-1)) - Integer.parseInt(qtyList1.get(i-1)))+Integer.parseInt(qtyList2.get(i))) - Integer.parseInt(qtyList1.get(i));
+
+							 }else{
+								 sasu = Integer.parseInt(sasuList2.get(i-1))+Integer.parseInt(qtyList2.get(i)) - Integer.parseInt(qtyList1.get(i));
+
+							 }
+
+							 sasuList2.add(Integer.toString(sasu));
+							 System.out.println("EEE="+sasu );
+
+						 }
+
+					 }
+
+				 }
+
+				 PreparedStatement statement5 = connection.prepareStatement(INSERT_sabun_aggr);
+				 for(int i=0; i<sasuList2.size(); i++){
+					 String nounyushiji_ymd = shiji_ymdList.get(i);
 					 String noba_cd =nobaList.get(i);
 					 int sasu = Integer.parseInt(sasuList2.get(i));
 
@@ -1718,26 +1584,24 @@ public class KBTediDAO{
 					 statement5.setInt(4, sasu);
 					 statement5.executeUpdate();
 
-	             }
+				 }
 
-	             }
+			 }
 
-	             //System.out.println("55555");
+		 } catch (SQLException e) {
+			 e.printStackTrace();
 
-	         } catch (SQLException e) {
-	        	 e.printStackTrace();
+		 } finally {
+			 if (connection != null) {
+				 connection.close();
 
-	         } finally {
-	        	 if (connection != null) {
-	        		 connection.close();
+			 }
 
-	        	 }
+		 }
 
-	         }
-	         return sb_hinbanList2;
+		 return sb_hinbanList2;
 
-	    }
-
+	 }
 
 
 	     //CSVデータ出力用 kb_sabun_aggrテーブル全件抽出
@@ -1791,7 +1655,6 @@ public class KBTediDAO{
 	                 sabunAllCsvList2.add(item);
 	             }
 
-
 	         } catch (SQLException e) {
 	             e.printStackTrace();
 	         } finally {
@@ -1834,169 +1697,6 @@ public class KBTediDAO{
 	         }
 	         return sabunAllCsvList3;
 	     }
-
-
-
-	     //差分マイナス一覧画面表示用
-/**	    public List<KBTItemBean> getSabunAllCsvList4(String kikan_s, String kikan_e, String insymd1, String insymd2, String hyoujiymd, String toDay, String e_date, HttpServletRequest request, HttpServletResponse response) throws SQLException {
-
-	         List<KBTItemBean>sabunAllCsvList4 = new ArrayList<KBTItemBean> ();
-
-	         List<String>sasuList = new ArrayList<String>();
-	         List<CsvImportBean>ZaikoList = new ArrayList<CsvImportBean> ();
-	         List<KBTItemBean>Tsuika_juchuMinusList = new ArrayList<KBTItemBean> ();
-	         List<KBTItemBean>KikanZaikoMinusList = new ArrayList<KBTItemBean> ();
-	         Connection connection = source.getConnection();
-
-	         try {
-	             PreparedStatement statement = connection.prepareStatement(SELECT_sabun_aggr2);
-	             statement.setString(1, kikan_s);
-	             statement.setString(2, kikan_e);
-	             ResultSet result = statement.executeQuery();
-
-	             while (result.next()) {
-	            	 KBTItemBean item = new KBTItemBean();
-	                 item.setHinban(result.getString("hinban"));
-
-	                 String hinban = result.getString("hinban");
-
-	                 PreparedStatement statement2 = connection.prepareStatement("SELECT * FROM(SELECT hinban, nounyushiji_ymd, noba_cd, "
-																				+ "SUM(CASE WHEN insymd=? THEN juchu_su ELSE 0 END) AS qty1, "
-																				+ "SUM(CASE WHEN insymd=? THEN juchu_su ELSE 0 END) AS qty2, "
-																				+ "(SUM(CASE WHEN insymd=? THEN juchu_su ELSE 0 END) - SUM(CASE WHEN insymd=? THEN juchu_su ELSE 0 END) ) AS su_sa  "
-																				+ "FROM t_juchu_test WHERE hinban=? AND nounyushiji_ymd >=? AND naikaku_kb='3' GROUP BY nounyushiji_ymd, noba_cd) AS X "
-																				+ "WHERE qty1 !=0 OR qty2 !=0 ");
-			             statement2.setString(1, insymd2);
-			             statement2.setString(2, insymd1);
-			             statement2.setString(3, insymd2);
-			             statement2.setString(4, insymd1);
-			             statement2.setString(5, hinban);
-			             statement2.setString(6, hyoujiymd);
-			             System.out.println("NEW hinban"+ result.getString("hinban"));
-			             System.out.println("NEW insymd1="+insymd1);
-			             System.out.println("NEW insymd2="+insymd2);
-			             System.out.println("NEW hyoujiymd="+hyoujiymd);
-			             ResultSet result2 = statement2.executeQuery();
-
-			             System.out.println("++++++++++++++++++");
-			             System.out.println(hinban);
-			             while (result2.next()) {
-				             System.out.println("@@@@@@@@@@@@@@@@@@@");
-			            	 KBTItemBean item2 = new KBTItemBean();
-			                 item2.setHinban(result2.getString("hinban"));
-			                 item2.setNounyushiji_ymd(result2.getString("nounyushiji_ymd"));
-			                 item2.setNoba_cd(result2.getString("noba_cd"));
-			                 item2.setQty1(result2.getInt("qty1"));
-			                 item2.setQty2(result2.getInt("qty2"));
-			                 item2.setSu_sa(result2.getInt("su_sa"));
-			                 sabunAllCsvList4.add(item2);
-			             }
-
-			         System.out.println("sabunAllCsvList4="+sabunAllCsvList4);
-		             System.out.println("******************");
-
-		             List<String>qtyList1 = new ArrayList<String>();
-		             List<String>qtyList2 = new ArrayList<String>();
-		             Iterator<KBTItemBean> iterator = sabunAllCsvList4.iterator();
-		             while (iterator.hasNext()) {KBTItemBean item2 = iterator.next();
-		             int Qty1 = item2.getQty1();
-		             int Qty2 = item2.getQty2();
-		             //System.out.println("Qty1="+Qty1);
-		             //System.out.println("Qty2="+Qty2);
-		             qtyList1.add(Integer.toString(Qty1));
-		             qtyList2.add(Integer.toString(Qty2));
-		             }
-
-		             System.out.println("qtyList1="+qtyList1);
-		             System.out.println("qtyList2="+qtyList2);
-
-		             int sasu = 0;
-		             for(int j=0; j<qtyList2.size(); j++){
-		            	 if(j==0){
-		            		 sasu = Integer.parseInt(qtyList2.get(j)) - Integer.parseInt(qtyList1.get(j));
-		            	 }else if(j==1){
-		            		 sasu = ((Integer.parseInt(qtyList2.get(j-1)) - Integer.parseInt(qtyList1.get(j-1)))+Integer.parseInt(qtyList2.get(j))) - Integer.parseInt(qtyList1.get(j));
-		            	 }else{
-		            		 sasu = Integer.parseInt(sasuList.get(j-1))+Integer.parseInt(qtyList2.get(j)) - Integer.parseInt(qtyList1.get(j));
-		            	 }
-	           		 sasuList.add(Integer.toString(sasu));
-			             //System.out.println("EEE="+sasu );
-		             }
-
-		             System.out.println("sasuList="+sasuList );
-
-
-		             PreparedStatement statement3 = connection.prepareStatement("SELECT * FROM tanpin_zaiko WHERE hinb=? AND nony='0700'");
-		             statement3.setString(1, hinban);
-		             ResultSet result3 = statement3.executeQuery();
-	                System.out.println("result!!="+result3);
-		             while (result3.next()) {
-		             CsvImportBean item3 = new CsvImportBean();
-	                item3.setMysry(result3.getDouble("mysry"));
-	                item3.setKoshin_ymd(result3.getString("koshin_ymd"));
-		             System.out.println("ABC="+item3);
-	                ZaikoList.add(item3);
-		             }
-		             System.out.println("ZaikoList="+ZaikoList);
-
-		             System.out.println("???????????????????");
-
-
-
-	             PreparedStatement statement4 = connection.prepareStatement("SELECT * FROM t_juchu_test WHERE hinban=? AND nounyushiji_ymd>=? AND naikaku_kb='5' AND add_kb='1' ");
-	             statement4.setString(1, hinban);
-	             statement4.setString(2, toDay);
-	             ResultSet result4 = statement4.executeQuery();
-
-	             while (result4.next()) {
-	            	 KBTItemBean item4 = new KBTItemBean();
-	                 item4.setHinban(result4.getString("hinban"));
-	                 item4.setNoba_cd(result4.getString("noba_cd"));
-	                 item4.setNounyushiji_ymd(result4.getString("nounyushiji_ymd"));
-	                 item4.setJuchu_su(result4.getString("juchu_su"));
-	                 Tsuika_juchuMinusList.add(item4);
-	             }
-
-
-	             PreparedStatement statement5 = connection.prepareStatement("SELECT SUM(total_qty) AS Total_Qty FROM("
-																			+ "SELECT sum(juchu_su) AS total_qty FROM `t_juchu_test` "
-																			+ "WHERE hinban=? AND insymd=? AND naikaku_kb='3' AND nounyushiji_ymd BETWEEN ? AND ? "
-																			+ "UNION ALL "
-																			+ "SELECT sum(juchu_su) AS total_qty FROM `t_juchu_test` "
-																			+ "WHERE hinban=? AND nounyushiji_ymd BETWEEN ? AND ? AND add_kb='1') AS X");
-	             statement5.setString(1, hinban);
-	             statement5.setString(2, insymd2);
-	             statement5.setString(3, toDay);
-	             statement5.setString(4, e_date);
-	             statement5.setString(5, hinban);
-	             statement5.setString(6, toDay);
-	             statement5.setString(7, e_date);
-	             ResultSet result5 = statement5.executeQuery();
-
-	             while (result5.next()) {
-	            	 KBTItemBean item5 = new KBTItemBean();
-	                 item5.setTotal_qty(result5.getInt("Total_Qty"));
-	                 KikanZaikoMinusList.add(item5);
-	             }
-
-	             }
-
-	             request.setAttribute("sasuList", sasuList);
-	             request.setAttribute("ZaikoList", ZaikoList);
-	             request.setAttribute("Tsuika_juchuMinusList", Tsuika_juchuMinusList);
-	             request.setAttribute("KikanZaikoMinusList", KikanZaikoMinusList);
-	             statement.close();
-	         } catch (SQLException e) {
-	             e.printStackTrace();
-	         }finally {
-	        	 if (connection != null) {
-	        		 connection.close();
-	        		 }
-	         }
-
-	         return sabunAllCsvList4;
-	         }
-**/
 
 
 	    //t_juchuテーブルとtanpin_zaikoテーブルを比較して過不足数を抽出しinsert　又、t_juchuにあってtanpin_zaikoにない品番をselect

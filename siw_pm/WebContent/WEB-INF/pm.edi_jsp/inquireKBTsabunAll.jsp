@@ -29,6 +29,7 @@ String today = (String)request.getAttribute("today");
 					});
 				});
 				</script>
+
 				<% request.setCharacterEncoding("UTF-8");
 				String day1 = request.getParameter("day1");
 				String day2 = request.getParameter("day2");
@@ -41,7 +42,7 @@ String today = (String)request.getAttribute("today");
 			<header id="main_header" >
 				<h1>内示差分出力</h1>
 					<p id="logo"><a href="index.html">
-				<img src="../../siwportalsite/SIW-Portal-site/images/siw-logo.png" width="150" height="25" alt="シンバテッコウショ" class="auto-style1"/></a><%= today %></p>
+				<img src="../../siwportalsite/SIW-Portal-site/images/siw-logo.png" width="150" height="25" alt="シンバテッコウショ" class="auto-style1"/></a><%=today%></p>
 			</header>
 		</div>
 		<!-- /ヘッダーエリアここまで -->

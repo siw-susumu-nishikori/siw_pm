@@ -70,7 +70,7 @@ String today = (String)request.getAttribute("today");
 			<section class="cntr, bottom" style="width:1350px;">
 				<table class="center">
 					<tr>
-						<td class="border-none">品番：<%out.println(hinban); %></td>
+						<td class="hinban">品番：<%out.println(hinban); %></td>
 					</tr>
 				</table>
 

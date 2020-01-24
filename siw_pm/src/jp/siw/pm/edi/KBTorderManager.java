@@ -38,7 +38,7 @@ public class KBTorderManager extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        String resultPage = PropertyLoader.getProperty("url.jsp.error");
+        String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
         Timestamp nowTime= new Timestamp(System.currentTimeMillis());
         SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");
         String today  = timeStampNowDay.format(nowTime);
@@ -59,7 +59,7 @@ public class KBTorderManager extends HttpServlet {
             List<KakuteikikanBean> kikanList = kikandao.getKikanList();
             request.setAttribute("kikanList", kikanList);
 
-            resultPage = PropertyLoader.getProperty("url.jsp.searchKBTorder");
+            resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.searchKBTorder");
 
         } catch (NamingException e) {
             request.setAttribute("errorMessage", e.getMessage());

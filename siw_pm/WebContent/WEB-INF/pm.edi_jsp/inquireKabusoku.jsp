@@ -82,6 +82,7 @@ String today = (String)request.getAttribute("today");
 				</table>
 			</section>
 		</article>
+
 		<!-- フッターエリアここから -->
 		<div class="wrapper row5">
 			<footer id="main_footer">

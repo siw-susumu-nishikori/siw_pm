@@ -40,7 +40,7 @@ public class KBTnvanRead extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		response.setContentType("text/html;charset=UTF-8");
-		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
 		String[] nvan = null;
 
         Timestamp nowTime= new Timestamp(System.currentTimeMillis());

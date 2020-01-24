@@ -16,7 +16,7 @@ String today = (String)request.getAttribute("today");
 
 			<script>
 				function submitJvan(b){
-					var flag = confirm("JVANの取込を開始します。\n本当によろしいですか？");
+					var flag = confirm("内示データ(RCV_JVAN.DAT)の取込を開始します。\n本当によろしいですか？");
 					if(flag == true){
 						b.disabled = true;
 						b.value = '取込中';
@@ -26,11 +26,9 @@ String today = (String)request.getAttribute("today");
 						return false;
 					}
 				}
-			</script>
 
-			<script>
 				function submitNvan(b){
-					var flag = confirm("NVANの取込を開始します。\n本当によろしいですか？");
+					var flag = confirm("確定データ(RCV_NVAN.DAT)の取込を開始します。\n本当によろしいですか？");
 					if(flag == true){
 						b.disabled = true;
 						b.value = '取込中';
@@ -63,6 +61,7 @@ String today = (String)request.getAttribute("today");
 			</nav>
 		</div>
 		<!-- /グローバルナビゲーションエリアここまで -->
+
 		<article>
 			<section class="cntr">
 				<a href="file:\\192.168.101.236\riseプロジェクト\16.クボタEDI取込フォルダ">クボタEDIデータ取込フォルダを開く</a>
@@ -72,7 +71,7 @@ String today = (String)request.getAttribute("today");
 							<td>■内示データ取込</td>
 						</tr>
 						<tr>
-							<td><input type="submit" id="btn" value="JVAN取込開始" onclick="return submitJvan(this)" style="width:120px" ></td>
+							<td><input type="submit" class="submit_btn" value="JVAN取込開始" onclick="return submitJvan(this)"  ></td>
 						</tr>
 					</table>
 				</form>
@@ -87,7 +86,7 @@ String today = (String)request.getAttribute("today");
 							<td>■確定データ取込</td>
 						</tr>
 						<tr>
-							<td><input type="submit" class="btn" value="NVAN取込開始" onclick="return submitNvan(this)" style="width:120px" ></td>
+							<td><input type="submit" class="submit_btn" value="NVAN取込開始" onclick="return submitNvan(this)" ></td>
 						</tr>
 					</table>
 				</form>

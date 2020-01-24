@@ -38,7 +38,7 @@ public class KBTsabunSearch2 extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		request.setCharacterEncoding("UTF-8");
     	System.out.println("=====KBTsabunSearch2.java START=====");
-		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
 		List<KBTItemBean> sabunAllCsvList2 = Cast.castList(request.getAttribute("sabunAllCsvList2"));
 		List<KBTItemBean>MinusAllList = new ArrayList<KBTItemBean> ();
 		for (int i = 0; i < sabunAllCsvList2.size(); i++) {
@@ -81,7 +81,7 @@ public class KBTsabunSearch2 extends HttpServlet {
 	            System.out.println("zaiko_su="+ZaikoList);
 	            System.out.println("Tsuika_juchuList="+Tsuika_juchuMinusList);
 */
-	            resultPage = PropertyLoader.getProperty("url.jsp.inquireKBTsabunMinusAll");
+	            resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.inquireKBTsabunMinusAll");
 
 	        } catch (NamingException e) {
 	            request.setAttribute("errorMessage", e.getMessage());

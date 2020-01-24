@@ -37,7 +37,7 @@ public class KBTnaijiChushutsu extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
 		request.setCharacterEncoding("UTF-8");
-		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
 
         Timestamp nowTime= new Timestamp(System.currentTimeMillis());
         SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy/MM/dd");

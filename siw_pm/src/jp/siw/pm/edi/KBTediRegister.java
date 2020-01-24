@@ -28,7 +28,7 @@ public class KBTediRegister extends HttpServlet {
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		// TODO Auto-generated method stub
 		request.setCharacterEncoding("UTF-8");
-		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
 	    String[][] kb35 =(String[][])request.getAttribute("kb35");
 
         Timestamp nowTime= new Timestamp(System.currentTimeMillis());

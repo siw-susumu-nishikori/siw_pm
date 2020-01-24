@@ -30,7 +30,7 @@ public class KBTediManager extends HttpServlet {
 	 */
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String resultPage = PropertyLoader.getProperty("url.jsp.importKBTedi");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.importKBTedi");
 
         Timestamp nowTime= new Timestamp(System.currentTimeMillis());
         SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");

@@ -36,7 +36,7 @@ public class KakuteiKikanRegister extends HttpServlet {
 	 */
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-		String resultPage = PropertyLoader.getProperty("url.jsp.error");
+		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
         String kikanValue = request.getParameter("kikan");
         Timestamp nowTime= new Timestamp(System.currentTimeMillis());
         SimpleDateFormat timeStampNowDay = new SimpleDateFormat("yyyy-MM-dd");
@@ -52,7 +52,7 @@ public class KakuteiKikanRegister extends HttpServlet {
             List<KakuteikikanBean> kikanList = kikandao.getKikanList();
             request.setAttribute("kikanList", kikanList);
 
-            resultPage = PropertyLoader.getProperty("url.jsp.inquireKakuteiKikan");
+            resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.inquireKakuteiKikan");
 
         }catch (SQLException e) {
         	request.setAttribute("errorMessage", e.getMessage());

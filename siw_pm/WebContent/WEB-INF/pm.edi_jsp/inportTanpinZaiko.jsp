@@ -59,7 +59,7 @@ String today = (String)request.getAttribute("today");
 							<td>■単品在庫データ取込</td>
 						</tr>
 						<tr>
-							<td><input type="submit" value="取込開始" onclick="return submitChk(this)" style="width:120px" ></td>
+							<td><input type="submit" class="submit_btn" value="取込開始" onclick="return submitChk(this)" ></td>
 						</tr>
 					</table>
 					<p>注1.取込ファイル名:FSKN280A.csv</p>
