@@ -358,10 +358,13 @@ public class YamazumiDao {
 		Connection connection = source.getConnection();
 
 		//t_fukaテーブル削除
-		PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_fuka into outfile \'C:/pleiades_1/workspace/siw_pa/WebContent/FUKA/FUKA_FILES/" + today + "_t_fuka.csv\' fields terminated by \',\' enclosed by \'\"\' ");
-		//PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_fuka into outfile \'C:/users/see04nave/desktop/" + today + "_t_fuka.csv\' fields terminated by \',\' enclosed by \'\"\' ");
-		//PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_fuka into outfile \'C:/temp/" + today + "_t_fuka.csv\' fields terminated by \',\' enclosed by \'\"\' ");
-		//PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_fuka into outfile \'//192.168.101.236/riseプロジェクト/15.生産負荷計算/" + today + "_t_fuka.csv\' fields terminated by \',\' enclosed by \'\"\' ");
+		PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_fuka into outfile \'C:/Users/SEE04NAVE/git/siw_pm/siw_pm/WebContent/FUKA/FUKA_FILES/" + today + "_t_fuka.csv\' fields terminated by \',\' enclosed by \'\"\' ");
+
+		//t_fukaテーブル削除
+		//サーバーアップロード時には↓を使う
+		//PreparedStatement statementFukaCsv = connection.prepareStatement("select *  from t_fuka into outfile \'C:/pleiades_1/workspace/siw_pa/WebContent/FUKA/FUKA_FILES/" + today + "_t_fuka.csv\' fields terminated by \',\' enclosed by \'\"\' ");
+
+
 		statementFukaCsv.executeQuery();
 
 		//File srcFile = new File("C:/fuka/" + today + "_t_fuka.csv");
@@ -384,7 +387,12 @@ public class YamazumiDao {
 		Connection connection = source.getConnection();
 
 		//t_fukaテーブル削除
-		PreparedStatement statementMitourokuCsv = connection.prepareStatement("select *  from t_mitouroku into outfile \'C:/pleiades_1/workspace/siw_pa/WebContent/FUKA/FUKA_FILES/" + today + "_t_mitouroku.csv\' fields terminated by \',\' enclosed by \'\"\' ");
+		PreparedStatement statementMitourokuCsv = connection.prepareStatement("select *  from t_mitouroku into outfile \'C:/Users/SEE04NAVE/git/siw_pm/siw_pm/WebContent/FUKA/FUKA_FILES/" + today + "_t_mitouroku.csv\' fields terminated by \',\' enclosed by \'\"\' ");
+
+		//t_fukaテーブル削除
+		//サーバーアップロード時には↓を使う
+		//PreparedStatement statementMitourokuCsv = connection.prepareStatement("select *  from t_mitouroku into outfile \'C:/pleiades_1/workspace/siw_pa/WebContent/FUKA/FUKA_FILES/" + today + "_t_mitouroku.csv\' fields terminated by \',\' enclosed by \'\"\' ");
+
 		statementMitourokuCsv.executeQuery();
 		System.out.println("Mitouroku0100csv 登録終了3==  " + statementMitourokuCsv );
 		return mitouroku0100csv;
