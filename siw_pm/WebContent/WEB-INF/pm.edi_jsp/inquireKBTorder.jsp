@@ -61,6 +61,10 @@ String today = (String)request.getAttribute("today");
 		Iterator<KBTItemBean> iterator6 = itemListOrder.iterator();
 		%>
 
+		<% List<KBTItemBean> HinmokuMasterList = Cast.castList(request.getAttribute("HinmokuMasterList"));
+		Iterator<KBTItemBean> iteratorHinmoku = HinmokuMasterList.iterator();
+		%>
+
 		<%String day1 = request.getParameter("day1");
 		String day2 = request.getParameter("day2");
 		String day3 = request.getParameter("day3");
@@ -71,6 +75,10 @@ String today = (String)request.getAttribute("today");
 				<table class="center">
 					<tr>
 						<td class="hinban">品番：<%out.println(hinban); %></td>
+						<% while (iteratorHinmoku.hasNext()) {KBTItemBean item = iteratorHinmoku.next();%>
+						<td class="hinm">品名：<%=item.getHinm() %></td>
+						<td class="hgyc">加工先：<%=item.getHgyc() %></td>
+						<%} %>
 					</tr>
 				</table>
 

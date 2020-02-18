@@ -34,6 +34,7 @@ public class KBTediDAO{
 	 private static final String SELECT_hinban = "select hinban from t_juchu_test group by hinban";
 	 private static final String SELECT_day = "select insymd from t_juchu_test group by insymd";
 	 private static final String SELECT_naiji_ins_day = "select insymd from t_juchu_test where naikaku_kb='3' group by insymd order by insymd desc limit 0,6"; //insymdを降順に6行分取得
+	 private static final String SELECT_t_hinmoku_all = "SELECT * FROM t_hinmoku_all WHERE hinb=?";
 	 private static final String SELECT_order = "SELECT * FROM("
 	 											+ "SELECT hinban, nounyushiji_ymd, noba_cd, "
 	 											+ "SUM(CASE WHEN insymd= ? THEN CASE WHEN naikaku_kb='3' THEN juchu_su ELSE 0 END ELSE 0 END) AS qty1, "
@@ -72,11 +73,11 @@ public class KBTediDAO{
 	 private static final String DELETE_sabun_all = "DELETE FROM kb_sabun_all";
 	 private static final String SELECT_sabun_hinban = "select hinban from kb_sabun_all group by hinban";
 	 private static final String SELECT_sabun_all = "select * from kb_sabun_all group by hinban";
-	 private static final String INSERT_sabun_aggr = "insert into kb_sabun_aggr values(?, ?, ?, ?)";
+	 private static final String INSERT_sabun_aggr = "insert into kb_sabun_aggr values(?, ?, ?, ?, ?, ?)";
 	 private static final String DELETE_sabun_aggr = "DELETE FROM kb_sabun_aggr";
-	 private static final String SELECT_sabun_aggr = "SELECT * FROM kb_sabun_aggr";
-	 private static final String SELECT_sabun_aggr2 = "SELECT * FROM kb_sabun_aggr WHERE nounyushiji_ymd BETWEEN ? AND ? AND sasu<0 GROUP BY hinban";
-	 private static final String SELECT_sabun_aggr3 = "SELECT * FROM kb_sabun_aggr WHERE nounyushiji_ymd BETWEEN ? AND ? AND sasu<0";
+	 private static final String SELECT_sabun_aggr = "SELECT * FROM kb_sabun_aggr ORDER BY hgyc ASC, hinban ASC";
+	 private static final String SELECT_sabun_aggr2 = "SELECT * FROM kb_sabun_aggr WHERE nounyushiji_ymd BETWEEN ? AND ? AND sasu<0 GROUP BY hinban ORDER BY hgyc ASC, hinban ASC";
+	 private static final String SELECT_sabun_aggr3 = "SELECT * FROM kb_sabun_aggr WHERE nounyushiji_ymd BETWEEN ? AND ? AND sasu<0 ORDER BY hgyc ASC, hinban ASC";
 	 private static final String INSERT_kabusoku = "INSERT INTO kabusoku(hinban, mysry, kikansry, kabusoku)"
 	 											+ "SELECT hinban, mysry, SUM(total_qty), (mysry-SUM(total_qty)) FROM("
 	 											+ "SELECT hinban, juchu_su AS total_qty FROM `t_juchu_test` "
@@ -612,6 +613,42 @@ public class KBTediDAO{
 		 return naijiListDay;
 
 	 }
+
+
+	//hinbanからt_hinmoku_allからマスタ項目を抽出
+		 public List<KBTItemBean>getHinmokuMasterList(String hinban) throws SQLException {
+
+			 List<KBTItemBean>HinmokuMasterList = new ArrayList<KBTItemBean> ();
+			 Connection connection = source.getConnection();
+
+			 try {
+
+				 PreparedStatement statement = connection.prepareStatement(SELECT_t_hinmoku_all);
+				 statement.setString(1, hinban);
+				 ResultSet result = statement.executeQuery();
+
+				 while (result.next()) {
+					 KBTItemBean item = new KBTItemBean();
+					 item.setHinm(result.getString("hinm"));
+					 item.setHgyc(result.getString("hgyc"));
+					 HinmokuMasterList.add(item);
+
+				 }
+
+			 } catch (SQLException e) {
+				 e.printStackTrace();
+
+			 } finally {
+				 if (connection != null) {
+					 connection.close();
+
+				 }
+
+			 }
+
+			 return HinmokuMasterList;
+
+		 }
 
 
 	 //指示日、指示数を指定し取得
@@ -1454,9 +1491,9 @@ public class KBTediDAO{
 			 }
 
 			 System.out.println("=====SabunAllList iterator=====");
+			 int j=0;
 			 Iterator<KBTItemBean> iterator = SabunAllList.iterator();
 			 while (iterator.hasNext()) {KBTItemBean item2 = iterator.next();
-			 int j=0;
 			 String hinban = item2.getHinban();
 			 String nounyushiji_ymd = item2.getNounyushiji_ymd();
 			 String noba_cd = item2.getNoba_cd();
@@ -1571,19 +1608,30 @@ public class KBTediDAO{
 					 }
 
 				 }
+				 	//2020/02/04 品名、加工先表示のため追記
+					 PreparedStatement statement7 = connection.prepareStatement("SELECT * FROM t_hinmoku_all WHERE hinb=?");
+					 statement7.setString(1, hinban);
+					 ResultSet result7 = statement7.executeQuery();
 
-				 PreparedStatement statement5 = connection.prepareStatement(INSERT_sabun_aggr);
-				 for(int i=0; i<sasuList2.size(); i++){
-					 String nounyushiji_ymd = shiji_ymdList.get(i);
-					 String noba_cd =nobaList.get(i);
-					 int sasu = Integer.parseInt(sasuList2.get(i));
+					 while (result7.next()) {
+						 String hinm = result7.getString("hinm");
+						 String hgyc = result7.getString("hgyc");
 
-					 statement5.setString(1, hinban);
-					 statement5.setString(2, nounyushiji_ymd);
-					 statement5.setString(3, noba_cd);
-					 statement5.setInt(4, sasu);
-					 statement5.executeUpdate();
+						 PreparedStatement statement5 = connection.prepareStatement(INSERT_sabun_aggr);
+						 for(int i=0; i<sasuList2.size(); i++){
+							 String nounyushiji_ymd = shiji_ymdList.get(i);
+							 String noba_cd =nobaList.get(i);
+							 int sasu = Integer.parseInt(sasuList2.get(i));
 
+							 statement5.setString(1, hinban);
+							 statement5.setString(2, nounyushiji_ymd);
+							 statement5.setString(3, noba_cd);
+							 statement5.setInt(4, sasu);
+							 statement5.setString(5, hinm);
+							 statement5.setString(6, hgyc);
+							 statement5.executeUpdate();
+
+					 }
 				 }
 
 			 }
@@ -1620,6 +1668,8 @@ public class KBTediDAO{
 	                 item.setNounyushiji_ymd(result.getString("nounyushiji_ymd"));
 	                 item.setNoba_cd(result.getString("noba_cd"));
 	                 item.setSasu(result.getInt("sasu"));
+	                 item.setHinm(result.getString("hinm"));
+	                 item.setHgyc(result.getString("hgyc"));
 	                 sabunAllCsvList.add(item);
 	             }
 
@@ -1652,6 +1702,8 @@ public class KBTediDAO{
 	                 item.setNounyushiji_ymd(result.getString("nounyushiji_ymd"));
 	                 item.setNoba_cd(result.getString("noba_cd"));
 	                 item.setSasu(result.getInt("sasu"));
+	                 item.setHinm(result.getString("hinm"));
+	                 item.setHgyc(result.getString("hgyc"));
 	                 sabunAllCsvList2.add(item);
 	             }
 
@@ -1685,6 +1737,8 @@ public class KBTediDAO{
 	                 item.setNounyushiji_ymd(result.getString("nounyushiji_ymd"));
 	                 item.setNoba_cd(result.getString("noba_cd"));
 	                 item.setSasu(result.getInt("sasu"));
+	                 item.setHinm(result.getString("hinm"));
+	                 item.setHgyc(result.getString("hgyc"));
 	                 sabunAllCsvList3.add(item);
 	             }
 
@@ -1701,16 +1755,18 @@ public class KBTediDAO{
 
 	    //t_juchuテーブルとtanpin_zaikoテーブルを比較して過不足数を抽出しinsert　又、t_juchuにあってtanpin_zaikoにない品番をselect
 	    public List<KBTItemBean> getKabusokuList(String insymd, String toDay, String e_date) throws SQLException {
-	        List<KBTItemBean>KabusokuList = new ArrayList<KBTItemBean> ();
+	    	List<KBTItemBean>KabusokuList = new ArrayList<KBTItemBean> ();
 	    	Connection connection = source.getConnection();
 
-	        try {
-	        	//kabusokuテーブルをクリア
-	        	PreparedStatement statement = connection.prepareStatement(DELETE_kabusoku);
+	    	try {
+
+	    		//kabusokuテーブルをクリア
+	    		PreparedStatement statement = connection.prepareStatement(DELETE_kabusoku);
 	        	statement.executeUpdate();
 	        	System.out.println(insymd);
 	        	System.out.println(toDay);
 	        	System.out.println(e_date);
+
 	        	//kabusokuテーブルへ在庫、指定期間の内示数合計、在庫－内示数合計をinsert
 	        	PreparedStatement statement2 = connection.prepareStatement(INSERT_kabusoku);
 	        	statement2.setString(1, insymd);
@@ -1719,30 +1775,35 @@ public class KBTediDAO{
 				statement2.setString(4, toDay);
 				statement2.setString(5, e_date);
 				statement2.executeUpdate();
+
 				//単品在庫データに無い内示データの品番を検索
 	        	PreparedStatement statement3 = connection.prepareStatement(SELECT_No_target);
 	        	statement3.setString(1, insymd);
 				statement3.setString(2, toDay);
 				statement3.setString(3, e_date);
 				ResultSet result = statement3.executeQuery();
-	             while (result.next()) {
-	            	 KBTItemBean item = new KBTItemBean();
-	            	 item.setHinban(result.getString("hinban"));
-	                 item.setGokei_su(result.getInt("gokei_su"));
-	                 KabusokuList.add(item);
 
-	             }
+				while (result.next()) {
+					KBTItemBean item = new KBTItemBean();
+					item.setHinban(result.getString("hinban"));
+					item.setGokei_su(result.getInt("gokei_su"));
+					KabusokuList.add(item);
 
-	        } catch (SQLException e) {
-	        	e.printStackTrace();
-	        	} finally {
-	        		if (connection != null) {
-	        			connection.close();
-	        			}
-	        		}
-			return KabusokuList;
+				}
 
-	        }
+	    	} catch (SQLException e) {
+	    		e.printStackTrace();
+
+	    	} finally {
+	    		if (connection != null) {
+	    			connection.close();
+
+	    		}
+
+	    	}
+	    	return KabusokuList;
+
+	    }
 
 
 	     //CSVデータ出力用 kabusokuテーブル全件抽出

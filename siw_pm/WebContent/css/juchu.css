@@ -2,18 +2,17 @@
 /* CSS Document */
 
 article{
-	margin:auto;
 	width:850px;
+	margin: 0 auto;
 	clear: both;
 	padding-top: 10px;
-
 }
 
 section.under{
-	margin: auto;
+	width: 1350px;
+	margin: 0 auto;
 	padding-bottom: 10px;
 	border-bottom: dashed 2px #999;
-	width: 1350px;
 	position: relative;
 	right: 240px;
 }
@@ -66,7 +65,7 @@ caption{
 	white-space: nowrap;
 	-webkit-overflow-scrolling: touch;
 	position: relative;
-	right: 240px;
+/*	right: 240px; */
 }
 
 /***inquireKabusoku.jsp***/
@@ -94,6 +93,19 @@ td.border-none{
 }
 
 td.hinban{
+	font-size: 14px;
+	font-weight: bold;
+	border: none;
+}
+
+td.hinm{
+	font-size: 14px;
+	font-weight: bold;
+	border: none;
+	width: 300px;
+}
+
+td.hgyc{
 	font-size: 14px;
 	font-weight: bold;
 	border: none;

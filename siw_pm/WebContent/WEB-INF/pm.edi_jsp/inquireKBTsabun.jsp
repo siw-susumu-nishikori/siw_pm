@@ -58,12 +58,18 @@ String today = (String)request.getAttribute("today");
 			</nav>
 		</div>
 		<!-- /グローバルナビゲーションエリアここまで -->
+
+			<% List<KBTItemBean> HinmokuMasterList = Cast.castList(request.getAttribute("HinmokuMasterList"));
+			Iterator<KBTItemBean> iteratorHinmoku = HinmokuMasterList.iterator();
+			%>
+
 			<% List<KBTItemBean> SabunList = Cast.castList(request.getAttribute("SabunList"));
 			Iterator<KBTItemBean> iterator = SabunList.iterator();
 			Iterator<KBTItemBean> iterator2 = SabunList.iterator();
 			Iterator<KBTItemBean> iterator3 = SabunList.iterator();
 			Iterator<KBTItemBean> iterator4 = SabunList.iterator();
 			Iterator<KBTItemBean> iterator5 = SabunList.iterator();
+			Iterator<KBTItemBean> iterator14 = SabunList.iterator();
 			%>
 
 			<% List<String> sasuList = Cast_String.castList(request.getAttribute("sasuList"));
@@ -108,6 +114,10 @@ String today = (String)request.getAttribute("today");
 					<table>
 						<tr>
 							<td class="hinban">品番：<%out.println(hinban); %></td>
+							<% while (iteratorHinmoku.hasNext()) {KBTItemBean item = iteratorHinmoku.next();%>
+							<td class="hinm">品名：<%=item.getHinm() %></td>
+							<td class="hgyc">加工先：<%=item.getHgyc() %></td>
+							<%} %>
 						</tr>
 					</table>
 					<table class="order_search" style="clear:both;">

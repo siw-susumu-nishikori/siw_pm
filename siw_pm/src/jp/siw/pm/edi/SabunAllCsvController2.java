@@ -91,7 +91,7 @@ public class SabunAllCsvController2 extends HttpServlet {
             List<KBTItemBean>sabunAllCsvList2 = dao.getSabunAllCsvList2(kikan_s, kikan_e);
             request.setAttribute("sabunAllCsvList2", sabunAllCsvList2);
             //CSVファイル1行目の項目名設定
-            String header ="\"" + "hinban" + "\"" + "," + "\"" + "nounyushiji_ymd" + "\"" + "," + "\"" + "noba" + "\"" + "," + "\"" + "sabun sry" + "\""  + "\r\n";
+       		String header ="\"" + "hinban" + "\"" + "," +"\"" + "hinm" + "\"" + "," + "\"" + "hgyc" + "\"" + "," +"\"" + "nounyushiji_ymd" + "\"" + "," + "\"" + "noba" + "\"" + "," + "\"" + "sabun sry" + "\""  + "\r\n";
 
             pw.print(header);
 
@@ -100,9 +100,11 @@ public class SabunAllCsvController2 extends HttpServlet {
                 String nounyushiji_ymd = sabunAllCsvList2.get(i).getNounyushiji_ymd();
                 String noba = sabunAllCsvList2.get(i).getNoba_cd();
                 int sasu = sabunAllCsvList2.get(i).getSasu();
+    			String hinm = sabunAllCsvList2.get(i).getHinm();
+    			String hgyc = sabunAllCsvList2.get(i).getHgyc();
 
                 //CSVファイル内部に記載する形式で文字列を設定
-                String outputString = "\"" + hinban + "\"" + "," + "\"" + nounyushiji_ymd + "\"" + "," + "\"" + noba + "\"" + "," + "\"" + sasu + "\"" + "\r\n";
+                String outputString = "\"" + hinban + "\"" + "," + "\"" + hinm + "\"" + "," + "\"" + hgyc + "\"" + "," + "\"" + nounyushiji_ymd + "\"" + "," + "\"" + noba + "\"" + "," + "\"" + sasu + "\"" + "\r\n";
 
                 //CSVファイルに書き込み
                 pw.print(outputString);
@@ -113,7 +115,7 @@ public class SabunAllCsvController2 extends HttpServlet {
                 List<KBTItemBean>sabunAllCsvList3 = dao.getSabunAllCsvList3(kikan_s, kikan_e);
                 request.setAttribute("sabunAllCsvList3", sabunAllCsvList3);
                 //CSVファイル1行目の項目名設定
-                String header ="\"" + "hinban" + "\"" + "," + "\"" + "nounyushiji_ymd" + "\"" + "," + "\"" + "noba" + "\"" + "," + "\"" + "sabun sry" + "\""  + "\r\n";
+                String header ="\"" + "hinban" + "\"" + "," +"\"" + "hinm" + "\"" + "," + "\"" + "hgyc" + "\"" + "," +"\"" + "nounyushiji_ymd" + "\"" + "," + "\"" + "noba" + "\"" + "," + "\"" + "sabun sry" + "\""  + "\r\n";
 
                 pw.print(header);
 
@@ -122,9 +124,11 @@ public class SabunAllCsvController2 extends HttpServlet {
                     String nounyushiji_ymd = sabunAllCsvList3.get(i).getNounyushiji_ymd();
                     String noba = sabunAllCsvList3.get(i).getNoba_cd();
                     int sasu = sabunAllCsvList3.get(i).getSasu();
+        			String hinm = sabunAllCsvList3.get(i).getHinm();
+        			String hgyc = sabunAllCsvList3.get(i).getHgyc();
 
                     //CSVファイル内部に記載する形式で文字列を設定
-                    String outputString = "\"" + hinban + "\"" + "," + "\"" + nounyushiji_ymd + "\"" + "," + "\"" + noba + "\"" + "," + "\"" + sasu + "\"" + "\r\n";
+                    String outputString = "\"" + hinban + "\"" + "," + "\"" + hinm + "\"" + "," + "\"" + hgyc + "\"" + "," + "\"" + nounyushiji_ymd + "\"" + "," + "\"" + noba + "\"" + "," + "\"" + sasu + "\"" + "\r\n";
 
                     //CSVファイルに書き込み
                     pw.print(outputString);

@@ -61,6 +61,9 @@ public class KBTorderSearch extends HttpServlet {
             List<KBTItemBean> itemListOrder = dao.getItemListOrder(hinban, insymd1, insymd2, insymd3, dispDate);
             request.setAttribute("itemListOrder", itemListOrder);
 
+            List<KBTItemBean> HinmokuMasterList = dao.getHinmokuMasterList(hinban);
+            request.setAttribute("HinmokuMasterList", HinmokuMasterList);
+
             resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.inquireKBTorder");
 
         } catch (NamingException e) {

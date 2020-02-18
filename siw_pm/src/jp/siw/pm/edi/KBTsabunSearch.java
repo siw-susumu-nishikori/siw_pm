@@ -53,6 +53,9 @@ public class KBTsabunSearch extends HttpServlet {
             List<KBTItemBean> SabunList = dao.getSabunList(hinban, insymd1, insymd2, hyoujiymd, request, response);
             request.setAttribute("SabunList", SabunList);
 
+            List<KBTItemBean> HinmokuMasterList = dao.getHinmokuMasterList(hinban);
+            request.setAttribute("HinmokuMasterList", HinmokuMasterList);
+
             List<KBTItemBean> Tsuika_juchuList = dao.getTsuika_juchuList(hinban, toDay);
             request.setAttribute("Tsuika_juchuList", Tsuika_juchuList);
 

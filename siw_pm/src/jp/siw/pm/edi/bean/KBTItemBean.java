@@ -155,6 +155,8 @@ public class KBTItemBean {
     private int mysry;
     private int kikansry;
     private int kabusoku;
+	private String hinm;
+	private String hgyc;
 	public int getKanri_no() {
 		return kanri_no;
 	}
@@ -1078,6 +1080,18 @@ public class KBTItemBean {
 	}
 	public void setKabusoku(int kabusoku) {
 		this.kabusoku = kabusoku;
+	}
+	public String getHinm() {
+		return hinm;
+	}
+	public void setHinm(String hinm) {
+		this.hinm = hinm;
+	}
+	public String getHgyc() {
+		return hgyc;
+	}
+	public void setHgyc(String hgyc) {
+		this.hgyc = hgyc;
 	}
 
 }

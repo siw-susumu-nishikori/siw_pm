@@ -2,24 +2,11 @@
 package jp.siw.pm.edi;
 
 import java.io.IOException;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
-import javax.naming.NamingException;
-import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import jp.siw.pm.edi.bean.CsvImportBean;
-import jp.siw.pm.edi.bean.KBTItemBean;
-import jp.siw.pm.edi.dao.KBTediDAO;
-import jp.siw.pm.edi.util.Cast;
-import jp.siw.pm.edi.util.PropertyLoader;
 
 /**
  * Servlet implementation class KBTsabunSearch2
@@ -36,7 +23,7 @@ public class KBTsabunSearch2 extends HttpServlet {
     }
 
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-		request.setCharacterEncoding("UTF-8");
+/*		request.setCharacterEncoding("UTF-8");
     	System.out.println("=====KBTsabunSearch2.java START=====");
 		String resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.error");
 		List<KBTItemBean> sabunAllCsvList2 = Cast.castList(request.getAttribute("sabunAllCsvList2"));
@@ -80,7 +67,7 @@ public class KBTsabunSearch2 extends HttpServlet {
 	            System.out.println("sasuList="+sasuList);
 	            System.out.println("zaiko_su="+ZaikoList);
 	            System.out.println("Tsuika_juchuList="+Tsuika_juchuMinusList);
-*/
+
 	            resultPage = PropertyLoader.getProperty("url.pm.edi_jsp.inquireKBTsabunMinusAll");
 
 	        } catch (NamingException e) {
@@ -91,7 +78,7 @@ public class KBTsabunSearch2 extends HttpServlet {
 	        }
            }
 	        RequestDispatcher dispatcher = request.getRequestDispatcher(resultPage);
-	        dispatcher.forward(request, response);
+	        dispatcher.forward(request, response);*/
 	    }
 
 	}

@@ -269,9 +269,6 @@
     <servlet-name>KBTsabunSearch2</servlet-name>
     <url-pattern>/KBTsabunSearch2</url-pattern>
   </servlet-mapping>
-
-
-
   <servlet>
     <description></description>
     <display-name>ActOyahinbanSelect</display-name>
@@ -301,5 +298,25 @@
   <servlet-mapping>
     <servlet-name>YamazumiCreate</servlet-name>
     <url-pattern>/YamazumiCreate</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>KHIediManager</display-name>
+    <servlet-name>KHIediManager</servlet-name>
+    <servlet-class>jp.siw.pm.edi.KHIediManager</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>KHIediManager</servlet-name>
+    <url-pattern>/KHIediManager</url-pattern>
+  </servlet-mapping>
+  <servlet>
+    <description></description>
+    <display-name>KHIediRegister</display-name>
+    <servlet-name>KHIediRegister</servlet-name>
+    <servlet-class>jp.siw.pm.edi.KHIediRegister</servlet-class>
+  </servlet>
+  <servlet-mapping>
+    <servlet-name>KHIediRegister</servlet-name>
+    <url-pattern>/KHIediRegister</url-pattern>
   </servlet-mapping>
 </web-app>

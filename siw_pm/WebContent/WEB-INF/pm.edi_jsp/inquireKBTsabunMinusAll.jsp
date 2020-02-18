@@ -142,21 +142,25 @@ String today = (String)request.getAttribute("today");
 			//PreparedStatement statement = connection.prepareStatement("SELECT * FROM kb_sabun_aggr WHERE nounyushiji_ymd BETWEEN ? AND ? AND sasu<0 GROUP BY hinban");
 			//statement.setString(1, kikan_s);
 			//statement.setString(2, kikan_e);
-			PreparedStatement statement = connection.prepareStatement("SELECT * FROM kb_sabun_aggr WHERE nounyushiji_ymd AND sasu<0 GROUP BY hinban");
+			PreparedStatement statement = connection.prepareStatement("SELECT * FROM kb_sabun_aggr WHERE nounyushiji_ymd AND sasu<0 GROUP BY hinban ORDER BY hgyc ASC, hinban ASC");
 			ResultSet result = statement.executeQuery();
 
 			while (result.next()) {
 				KBTItemBean item = new KBTItemBean();
 				item.setHinban(result.getString("hinban"));
+				item.setHinm(result.getString("hinm"));
+				item.setHgyc(result.getString("hgyc"));
 				String hinban = result.getString("hinban");
 				System.out.println("品番="+hinban);%>
 
 				<article>
-					<section style="width:1350px;">
+					<section>
 						<form method="Post" target="_blank" action="<%=PropertyLoader.getProperty("url.servlet.KBTorderSearch") %>" >
 							<table>
 								<tr>
 									<td class="hinban">品番：<%=item.getHinban()%></td>
+									<td class="hinm">品名：<%=item.getHinm()%></td>
+									<td class="hgyc">加工先：<%=item.getHgyc()%></td>
 								</tr>
 							</table>
 							<table class="order_search" style="clear:both;">
@@ -177,7 +181,10 @@ String today = (String)request.getAttribute("today");
 								<input type="hidden" name="day1" value="<%out.print(day1);%>">
 								<input type="hidden" name="day3" value="<%out.print(day2);%>"><!-- 受注照会検索のためnameをday3へ -->
 						</form>
-
+					</section>
+				</article>
+				<article>
+					<section style="width:1100px; margin: 0 auto;">
 						<% PreparedStatement statement2 = connection.prepareStatement("SELECT * FROM(SELECT hinban, nounyushiji_ymd, noba_cd, "
 																						+ "SUM(CASE WHEN insymd=? THEN juchu_su ELSE 0 END) AS qty1, "
 																						+ "SUM(CASE WHEN insymd=? THEN juchu_su ELSE 0 END) AS qty2, "
@@ -216,7 +223,7 @@ String today = (String)request.getAttribute("today");
 
 						}%>
 
-						<table class="juchu_waku" style="float:none">
+						<table class="juchu_waku" style="float:none; width:100%;">
 						<caption>《内示》</caption>
 							<tr>
 								<td>納入指示日</td>
@@ -348,36 +355,41 @@ String today = (String)request.getAttribute("today");
 				<article>
 					<section>
 						<table>
-						<% PreparedStatement statement4 = connection.prepareStatement("SELECT * FROM tanpin_zaiko WHERE hinb=? AND nony='0700'");
-						statement4.setString(1, hinban);
-						ResultSet result4 = statement4.executeQuery();
-							System.out.println("result!!="+result3);
-
-						while (result4.next()) {
-							CsvImportBean item4 = new CsvImportBean();
-							item4.setMysry(result4.getDouble("mysry"));
-							item4.setKoshin_ymd(result4.getString("koshin_ymd"));
-								System.out.println("ABC="+item4);
-							ZaikoList.add(item4);
-								System.out.println("ZaikoList="+ZaikoList);%>
 						<caption>《在庫》</caption>
 							<tr>
 								<th>自在庫数(単品在庫データ)</th>
 							</tr>
+						<% PreparedStatement statement4 = connection.prepareStatement("SELECT * FROM tanpin_zaiko WHERE hinb=? AND nony='0700'");
+						statement4.setString(1, hinban);
+						ResultSet result4 = statement4.executeQuery();
+						if(result4==null){
+								System.out.println("〇");
+						}else{
+							System.out.println("X");
+						}
+						while (result4.next()) {
+							CsvImportBean item4 = new CsvImportBean();
+							item4.setMysry(result4.getDouble("mysry"));
+								System.out.println("mysry="+result4.getDouble("mysry"));
+							item4.setKoshin_ymd(result4.getString("koshin_ymd"));
+								System.out.println("koshin_ymd="+result4.getString("koshin_ymd"));
+							ZaikoList.add(item4);
+								System.out.println("ZaikoList="+ZaikoList);%>
 							<tr>
 								<%Iterator<CsvImportBean> iterator7 = ZaikoList.iterator();%>
 								<% while (iterator7.hasNext()) {CsvImportBean item7 = iterator7.next();%>
+									<%mysry = (int)item7.getMysry(); %>
 								<td><%=item7.getKoshin_ymd()%>時点</td>
 							</tr>
 							<tr>
-								<td><%=item7.getMysry()%></td>
+								<td><%if(java.lang.Double.isNaN(item7.getMysry())){out.println("なし");}else{out.println(item7.getMysry());}%></td>
 								<%System.out.println("mysry="+item7.getMysry()); %>
-								<%mysry = (int)item7.getMysry(); %>
+
 							</tr>
 						</table>
 						<%} %>
 						<% ZaikoList.clear();%>
-
+				<%} %>
 						<% PreparedStatement statement5 = connection.prepareStatement("SELECT SUM(total_qty) AS Total_Qty FROM("
 																						+ "SELECT sum(juchu_su) AS total_qty FROM `t_juchu_test` "
 																						+ "WHERE hinban=? AND insymd=? AND naikaku_kb='3' AND nounyushiji_ymd BETWEEN ? AND ? "
@@ -437,7 +449,7 @@ String today = (String)request.getAttribute("today");
 					<section class="under">
 					</section>
 				</article>
-				<%} %>
+
 
 			<%} %>
 
